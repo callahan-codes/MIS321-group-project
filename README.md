@@ -14,4 +14,4 @@
 <p>I'm going to create a task list after our next meeting with the exec once we actually start coding. Everytime we pull/push from the repo, we will document it in this list so we know what all transactions have happened. We will put the pull/push info and a detailed description of what we did.</p>
 
 <h2>Comment Your Code</h2>
-<p>I haven't looked at yalls code, but comment every line. You should already be in that habit, but we need to know whats going on when someone else makes a push. The more descriptive, the better; even with the most simple code.</p>
+<p>I haven't looked at yalls code, but comment every line. You should already be in that habit, but we need to know whats going on when someone else makes a push. The more descriptive, the better - even with the most simple code.</p>
