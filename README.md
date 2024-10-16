@@ -1,6 +1,6 @@
 # MIS321-group-project
 <p><strong>Make sure yall save the <u>pulled repository</u> to your local machine <u>before making any changes and pushing them</u>. We all need to be responsible for having an extra non-edited project folder everytime we pull from the repo!!! This is so if anyone pushes a project with errors, we have the backup.</strong></p>
-<hr/>
+
 <h1>Requirements</h1>
 <h2>Dotnet</h2>
 <p>Make sure you have dotnet 8. My version is 8.0.4</p>
