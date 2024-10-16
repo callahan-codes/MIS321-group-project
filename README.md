@@ -4,6 +4,11 @@
 
 <h2>Dotnet</h2>
 <p>Make sure you have dotnet 8. My version is 8.0.4</p>
+<p>Run the following commands in your console (make sure in api folder). You might not need to since I technically uploaded the files... idk. Better safe than sorry.</p>
+<ul>
+  <li>dotnet new webapi --use-controllers</li>
+  <li>dotnet add package MySqlConnector</li>
+</ul>
 
 <h2>Task List</h2>
 <p>I'm going to create a task list after our next meeting with the exec once we actually start coding. Everytime we pull/push from the repo, we will document it in this list so we know what all transactions have happened. We will put the pull/push info and a detailed description of what we did.</p>
