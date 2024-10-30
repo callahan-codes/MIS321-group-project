@@ -41,9 +41,6 @@ nav ul li
 {
     display: inline-block;
     margin-right: 5px;
-}
-
-nav a {
     /* colors */
     color: white;
     background-color: var(--red);
@@ -58,9 +55,10 @@ nav a {
     /* decoration */
     text-decoration: none;
     font-weight: bold;
+    cursor: pointer;
 }
 
-nav li:hover a {
+nav li:hover {
     background-color: var(--white);
     color: var(--red);
 }
