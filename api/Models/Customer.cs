@@ -1,3 +1,5 @@
+// written by Bryce Callahan 10/30/2024
+
 namespace api.Models
 {
     // customer class
