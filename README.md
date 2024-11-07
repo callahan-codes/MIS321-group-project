@@ -36,6 +36,7 @@
     </ul>
   </li>
   <li>Created a clear all fields function to clear the fields of the specifid-by-param form</li>
+  <li>This is a test to make sure the branch is working.</li>
 </ul>
 
 <hr/>
