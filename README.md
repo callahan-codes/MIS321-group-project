@@ -1,7 +1,4 @@
 # MIS321-group-project
-<h1>Bryce's Branch</h1>
-<p>testing to make sure this applies to my branch only.</p>
-
 <hr/>
 <h1>Requirements</h1>
 <p><strong>Make sure yall save the <u>pulled repository</u> to your local machine <u>before making any changes and pushing them</u>. We all need to be responsible for having an extra non-edited project folder everytime we pull from the repo!!! This is so if anyone pushes a project with errors, we have the backup.</strong></p>
