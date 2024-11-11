@@ -303,14 +303,14 @@ function buildCustomerOrderForm() {
                                     <option value="10:00 PM">10:00 PM</option>
                                 </select>
                             </div>
-                            <div class="col-span-all">
-                                <label for="package">Select Package</label><br>
-                                <select id="package" name="package">
-                                    <option value="Package 1">Package 1</option>
-                                    <option value="Package 2">Package 2</option>
-                                    <option value="Package 3">Package 3</option>
-                                </select>
-                            </div>
+                        </div>
+                        <div class="col-span-all">
+                            <label for="package">Select Package</label><br>
+                            <select id="package" name="package">
+                                <option value="Package 1">Package 1</option>
+                                <option value="Package 2">Package 2</option>
+                                <option value="Package 3">Package 3</option>
+                            </select>
                         </div>
 
                         <button type="submit" onclick="createNewOrder()">Submit Order</button>
