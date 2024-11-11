@@ -27,6 +27,7 @@
 <ul>
   <li>Repo touch ups before start</li>
   <li>Created Models c#</li>
+  <li>Created base html, css, js</li>
   <li>Created display screen on admin login/ customer order button click js/css</li>
 </ul>
 
@@ -43,8 +44,8 @@
 </ul>
 
 
-//Update 11/7/2024 Connor 
-//Created Customer Order Form 
+<h2>Update 11/7/2024 | Connor</h2>
+<ul><li>Created Customer Order Form</li></ul>
 
 
 
@@ -52,6 +53,7 @@
 <ul>
   <li>Merged Bryces and Connors code</li>
   <li>Bryce made the admin forms</li>
+  <li>Connor made the customer form</li>
 </ul>
 
 
