@@ -53,6 +53,12 @@
   <li>Connor made the customer form</li>
 </ul>
 
+<h2>11/11/2024 | BC</h2>
+<ul>
+  <li>Merged Jebs code with bryce and connors</li>
+  <li>Jeb made the database(s) handler</li>
+</ul>
+
 
 <hr/>
 <hr/>
