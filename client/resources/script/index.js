@@ -1,5 +1,6 @@
 // init empty admin array
 let adminList = []
+let orderList = []
 
 // Handle Document OnLoad
 function handleOnLoad()
@@ -259,6 +260,7 @@ function adminLoginCheck()
     this function builds the customer order form.
 
     Written by Connor Gilstrap 11/7/2024
+        updated by Bryce Callahan 11/10/2024
 */
 function buildCustomerOrderForm() {
     // get app DOM
@@ -268,47 +270,50 @@ function buildCustomerOrderForm() {
     let html = `<div class="container">
                     <h4>Schedule Service</h4>
                     <form id="customerOrderForm" onsubmit="return false;" method="post">
-                        <div class="form-group">
-                            <label for="customerEmail">Customer Email</label><br>
-                            <input type="email" id="customerEmail" name="customerEmail" placeholder="Enter your email" required>
+                        <div id="alert"></div>
+                        <div class="grid col-2">
+                            <div>
+                                <label for="customerEmail">Your Email</label><br>
+                                <input type="email" id="customerEmail" name="customerEmail" placeholder="example@gmail.com" required>
+                            </div>
+                            <div>
+                                <label for="serviceAddress">Event Address</label><br>
+                                <input type="text" id="serviceAddress" name="serviceAddress" placeholder="Address of event" required>
+                            </div>
+
+                            <div>
+                                <label for="serviceDate">Event Date</label><br>
+                                <input type="date" id="serviceDate" name="serviceDate" required>
+                            </div>
+                            <div>
+                                <label for="serviceTime">Available Times</label><br>
+                                <select id="serviceTime" name="serviceTime" value="">
+                                    <option value="10:00 AM">10:00 AM</option>
+                                    <option value="11:00 AM">11:00 AM</option>
+                                    <option value="12:00 PM">12:00 PM</option>
+                                    <option value="1:00 PM">1:00 PM</option>
+                                    <option value="2:00 PM">2:00 PM</option>
+                                    <option value="3:00 PM">3:00 PM</option>
+                                    <option value="4:00 PM">4:00 PM</option>
+                                    <option value="5:00 PM">5:00 PM</option>
+                                    <option value="6:00 PM">6:00 PM</option>
+                                    <option value="7:00 PM">7:00 PM</option>
+                                    <option value="8:00 PM">8:00 PM</option>
+                                    <option value="9:00 PM">9:00 PM</option>
+                                    <option value="10:00 PM">10:00 PM</option>
+                                </select>
+                            </div>
+                            <div class="col-span-all">
+                                <label for="package">Select Package</label><br>
+                                <select id="package" name="package">
+                                    <option value="Package 1">Package 1</option>
+                                    <option value="Package 2">Package 2</option>
+                                    <option value="Package 3">Package 3</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="package">Select Package</label><br>
-                            <select id="package" name="package">
-                                <option value="Package 1">Package 1</option>
-                                <option value="Package 2">Package 2</option>
-                                <option value="Package 3">Package 3</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="serviceAddress">Service Address</label><br>
-                            <input type="text" id="serviceAddress" name="serviceAddress" placeholder="Enter service address" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="serviceDate">Service Date</label><br>
-                            <input type="date" id="serviceDate" name="serviceDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="serviceTime">Available Times</label><br>
-                            <select id="serviceTime" name="serviceTime">
-                                <option value="10:00 AM">10:00 AM</option>
-                                <option value="11:00 AM">11:00 AM</option>
-                                <option value="12:00 PM">12:00 PM</option>
-                                <option value="1:00 PM">1:00 PM</option>
-                                <option value="2:00 PM">2:00 PM</option>
-                                <option value="3:00 PM">3:00 PM</option>
-                                <option value="4:00 PM">4:00 PM</option>
-                                <option value="5:00 PM">5:00 PM</option>
-                                <option value="6:00 PM">6:00 PM</option>
-                                <option value="7:00 PM">7:00 PM</option>
-                                <option value="8:00 PM">8:00 PM</option>
-                                <option value="9:00 PM">9:00 PM</option>
-                                <option value="10:00 PM">10:00 PM</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" onclick="createNewOrder()">Submit Order</button>
-                        </div>
+
+                        <button type="button" onclick="createNewOrder()">Submit Order</button>
                     </form>
                 </div>`
 
@@ -320,6 +325,7 @@ function buildCustomerOrderForm() {
 //CreateNewOrder Written by Connor Gilstrap 11/7/2024
 function createNewOrder()
 {
+    // get dom values
     const email = document.getElementById('customerEmail').value
     const packageType = document.getElementById('package').value
     const serviceAddress = document.getElementById('serviceAddress').value
@@ -327,41 +333,42 @@ function createNewOrder()
     const serviceTime = document.getElementById('serviceTime').value
     const alert = document.getElementById('alert')
 
-
+    // check email
     if (email === null || email === undefined || email === '' || email.trim().length === 0)
     {
         alert.style.display = 'block'
         alert.innerHTML = 'You must fill out the <u>Email</u> field.'
         console.log('New order submission failed due to missing email.')
     }
-  
+    // check package
     else if (packageType === null || packageType === undefined || packageType === '')
     {
         alert.style.display = 'block'
         alert.innerHTML = 'You must select a <u>Package</u>.'
         console.log('New order submission failed due to missing package.')
     }
-  
+    // check address
     else if (serviceAddress === null || serviceAddress === undefined || serviceAddress === '')
     {
         alert.style.display = 'block'
         alert.innerHTML = 'You must fill out the <u>Service Address</u> field.'
         console.log('New order submission failed due to missing service address.')
     }
-  
+    // check date
     else if (serviceDate === null || serviceDate === undefined || serviceDate === '')
     {
         alert.style.display = 'block'
         alert.innerHTML = 'You must select a <u>Service Date</u>.'
         console.log('New order submission failed due to missing service date.')
     }
-  
+    // check time
     else if (serviceTime === null || serviceTime === undefined || serviceTime === '')
     {
         alert.style.display = 'block'
         alert.innerHTML = 'You must select a <u>Service Time</u>.'
         console.log('New order submission failed due to missing service time.')
     }
+    // complete order
     else 
     {
         // display success alert
@@ -378,15 +385,17 @@ function createNewOrder()
             serviceTime: serviceTime,
             cancelled: false
         }
-         // add order to order list
-         orderList.push(newOrder)
+        // add order to order list
+        orderList.push(newOrder)
 
-         console.log(orderList)
+        console.log(orderList)
 
         // clear order form fields
         clearAllFormFields('customerOrderForm')
     }
 }
+
+
 // Clear Form Fields Function | Admin & Customer Order
 /*
     this function clears all form fields. Connor, put your
@@ -417,6 +426,7 @@ function clearAllFormFields(formToClear)
 
         // default hide alert
         default:
+            alert.style.backgroundColor = 'var(--alert)'
             document.getElementById('alert').style.display = 'none'
             break
     }

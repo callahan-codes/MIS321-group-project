@@ -304,8 +304,11 @@ label
 }
 
 /* form inputs */
+input[type="text"],
 input[type="email"],
-input[type="password"]
+input[type="password"],
+input[type="date"],
+select
 {
     box-sizing: border-box;
     padding: 8px;
@@ -391,6 +394,11 @@ input[type="password"]:focus
 .col-long-right
 {
     grid-template-columns: auto 75%;
+}
+
+.col-span-all 
+{
+    grid-column: 1 / span 2;
 }
 
 /* links */
