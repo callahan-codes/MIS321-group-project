@@ -40,6 +40,7 @@
   <li>Created a clear all fields function to clear the fields of the specifid-by-param form</li>
 </ul>
 
+<<<<<<< HEAD
 
 <h2>Update 11/7/2024 | Connor</h2>
 <ul><li>Created Customer Order Form</li></ul>
@@ -54,6 +55,15 @@
 </ul>
 
 
+=======
+<h2>11/8/2024 | HW</h2>
+<ul>
+  <li>Created Database folder within the api folder </li>
+  <li>Created SQL script with all needed tables and TitleTownCatering Database within the Database Folder</li>
+  <li>Created Hayden Branch </li>
+</ul>
+
+>>>>>>> origin/Hayden
 <hr/>
 <hr/>
 <hr/>
