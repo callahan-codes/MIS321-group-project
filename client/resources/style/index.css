@@ -1,3 +1,5 @@
+/* Created by bryce callahan - updated by BC 11/15/2024 */
+
 /* CONFIGURATION */
 /* imports */
 @import url('https://fonts.cdnfonts.com/css/montserrat'); /* font */
@@ -140,11 +142,34 @@ header h5
     /* dimensions */
     width: 100%;
     height: 100%;
+    overflow-y: scroll;
 
     /* bg color and z-index */
     background-color: var(--dark-grey);
     color: var(--white);
     z-index: 100;
+}
+
+/* app scrollbar */
+/* width */
+#app-screen::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+#app-screen::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* Handle */
+#app-screen::-webkit-scrollbar-thumb {
+    background: var(--red); 
+}
+
+/* Handle on hover */
+#app-screen::-webkit-scrollbar-thumb:hover {
+    background: var(--light-grey); 
+    cursor: grab;
 }
 
 #app-close-btn 
@@ -495,15 +520,6 @@ a {
         font-size: 20px;
     }
 
-    h5
-    {
-        font-size: 10px;
-    }
-
-    h6
-    {
-        font-size: 8px;
-    }
 
     .col-2,
     .col-3,
@@ -512,6 +528,11 @@ a {
     .col-long-right
     {
         grid-template-columns: repeat(1,1fr);
+    }
+
+    .col-span-all 
+    {
+        grid-column: 1 / 2;
     }
 
     .hide-when-small 

@@ -67,6 +67,14 @@
   <li>Merged all tasks from each member to main.</li>
 </ul>
 
+<h2>11/15/2024 | BC</h2>
+<ul>
+  <li>Created Admin handler and controllers with their respective methods.</li>
+  <li>Created Customer handler and controllers with their respective methods.</li>
+  <li>Created the Admin/Customer dashboard, which shows logged in admin data/functions and the customer dash will eventually show the customer order (and past orders?)</li>
+  <li>Updated CSS to support the forms in mobile</li>
+</ul>
+
 <hr/>
 <hr/>
 <hr/>

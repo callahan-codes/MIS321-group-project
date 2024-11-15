@@ -1,127 +1,110 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+using api.Handlers;
 using api.Models;
-using MySqlConnector;
 
 namespace api.Databases
 {
     public class Database
     {
+        // db connection string
         private readonly string? cs;
+
+        // Player handler & static list
+        private AdminHandler adminHandler = new AdminHandler();
+        private static List<Admin> AllAdmin = new List<Admin>();
+
+        // Customer handler & static list
+        private CustomerHandler customerHandler = new CustomerHandler();
+        private static List<Customer> AllCustomer = new List<Customer>();
+
+        // put ur handler and static list below this. COMMENT YOUR CODE. EVERYTHING.
 
         public Database()
         {
-            cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
+            /* 
+                we will use the db made by jeb after we have all tested our code on localhost.
+                cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
+            */
+            cs = "Server=127.0.0.1;User ID=root;Password=MyPassword;Database=titletowncatering";
         }
 
+        /*
+            ADMIN TASKS
+
+                Written by Bryce Callahan 11/15/2024
+        */
+        // Get all admins
         public async Task<List<Admin>> GetAllAdmins()
         {
-
-            List<Admin> myAdmins = [];
-
-            using var connection = new MySqlConnection(cs);
-            await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM wpwwyo4a82kv2jrd.admins;", connection);
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            if(cs != null)
             {
-                myAdmins.Add(new Admin
-                {
-                    // All of the various things to get pulled
-                    Id = 1,
-                    Email = "Cool@123",
-                    Password = "Username"
-                });
+                // set list from admin handler
+                AllAdmin = await adminHandler.GetAllAdmins(cs);
             }
 
-            return myAdmins;
+            // return recipe list
+            return AllAdmin;
         }
 
+        // Add Admin
+        public async void AddNewAdmin(Admin admin)
+        {
+            if(cs != null)
+            {
+                // set list from admin handler
+                await adminHandler.AddNewAdmin(cs, admin);
+                await GetAllAdmins();
+            }
+        }
+
+        // Delete Admin
+        public async void DeleteAdmin(int adminID)
+        {
+            // set list from admin handler
+            if(cs != null)
+            {
+                await adminHandler.DeleteAdmin(cs, adminID);
+                await GetAllAdmins();
+            }
+        }
+
+        /*
+            CUSTOMER TASKS
+
+                Written by Bryce Callahan 11/15/2024
+        */
+        // Get all customers
         public async Task<List<Customer>> GetAllCustomers()
         {
-
-            List<Customer> myCustomers = [];
-
-            using var connection = new MySqlConnection(cs);
-            await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM wpwwyo4a82kv2jrd.customers;", connection);
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            if(cs != null)
             {
-                myCustomers.Add(new Customer
-                {
-                    // All of the various things to get pulled
-                    Id = 1,
-                    Name = "Trump",
-                    Email = "customer@gmail.com"
-                });
+                // set list from customer handler
+                AllCustomer = await customerHandler.GetAllCustomers(cs);
             }
 
-            return myCustomers;
+            // return recipe list
+            return AllCustomer;
         }
 
-        public async Task<List<Order>> GetAllOrders()
+        // Add Customer
+        public async void AddNewCustomer(Customer customer)
         {
-
-            List<Order> myOrders = [];
-
-            using var connection = new MySqlConnection(cs);
-            await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM wpwwyo4a82kv2jrd.orders;", connection);
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            if(cs != null)
             {
-                myOrders.Add(new Order
-                {
-                    // All of the various things to get pulled
-                    Id = 1,
-                    Date = "now",
-                    Time = "4",
-                    Package = 1,
-                    PackageHours = 4,
-                    Cancelled = false,
-                    ServiceDate = "tommorow",
-                    ServiceTime = "6",
-                    OrderedBy = "this should be custID not a string right?",
-                    ServicedBy = "aming id"
-                });
+                // set list from admin handler
+                await customerHandler.AddNewCustomer(cs, customer);
+                await GetAllCustomers();
             }
-
-            return myOrders;
         }
-        public async Task<List<Payment>> GetAllPayments()
+
+        // Delete Customer
+        public async void DeleteCustomer(int customerID)
         {
-
-            List<Payment> myPayments = [];
-
-            using var connection = new MySqlConnection(cs);
-            await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM wpwwyo4a82kv2jrd.payments;", connection);
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            if(cs != null)
             {
-                myPayments.Add(new Payment
-                {
-                    // All of the various things to get pulled
-                    Id = 1,
-                    OrderId = 1,
-                    CustomerId = 1,
-                    PaymentDate = "now",
-                    PaymentAmount = 4,
-                    PaymentMethod = "balling harder than yesterday",
-                    PaymentSuccessful = true
-
-                });
+                // set list from admin handler
+                await customerHandler.DeleteCustomer(cs, customerID);
+                await GetAllCustomers();
             }
-
-            return myPayments;
         }
     }
 }
