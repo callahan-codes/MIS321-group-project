@@ -713,7 +713,44 @@ function buildAdminDashboard(admin)
             <hr/>
 
             <h5>All orders</h5>
-        </div>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Date Ordered</th>
+                    <th>Time Ordered</th>
+                    <th>Cancelled Status</th>
+                    <th>Service Date</th>
+                    <th>Service Time</th>
+                    <th>Service Address</th>
+                    <th>Duration (hours)</th>
+                    <th>Package Type</th>
+                    <th>Ordered By</th>
+                    <th>Serviced By</th>
+                    <th>Payment ID</th>
+                </tr>
+    `
+
+    orderList.forEach(order => {
+        html += `
+            <tr>
+                <td>${order.id}</td>
+                <td>${order.date}</td>
+                <td>${order.time}</td>
+                <td>${order.cancelled}</td>
+                <td>${order.serviceDate}</td>
+                <td>${order.serviceTime}</td>
+                <td>${order.duration}</td>
+                <td>${order.package}</td>
+                <td>${order.orderedBy}</td>
+                <td>${order.servicedBy}</td>
+                <td>${order.paymentId}</td>
+            </tr>
+        `
+    });
+
+    html += `            
+        </table>
+    </div>
     `
 
     app.innerHTML = html
