@@ -355,25 +355,6 @@ async function createNewOrder()
             email: email
         }
 
-        // add to main customer list
-        customerList.push(newCustomer)
-        try 
-        {
-            // post | save to db through controller
-            await fetch(customerURL, {
-                method: "POST",
-                body: JSON.stringify(newCustomer),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
-            
-        } catch (error) 
-        {
-            // log
-            console.log(error)
-        }
-
         // create new order object and push to db
         // get order url
         const orderURL = url + 'order'
@@ -394,7 +375,24 @@ async function createNewOrder()
             paymentId: 1 // will replace this after we get payment
         }
 
-        console.log(orderList)
+        // add to main customer list
+        customerList.push(newCustomer)
+        try 
+        {
+            // post | save to db through controller
+            await fetch(customerURL, {
+                method: "POST",
+                body: JSON.stringify(newCustomer),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+            
+        } catch (error) 
+        {
+            // log
+            console.log(error)
+        }
 
         // add order to order list
         orderList.push(newOrder)
@@ -419,8 +417,6 @@ async function createNewOrder()
         clearAllFormFields('customerOrderForm')
     }
 }
-
-
 
 // DOM MANIPULATION FUNCTIONS
 // Loader Screen Function
@@ -647,7 +643,7 @@ function buildCustomerOrderForm() {
                                         <input type="text" id="serviceAddress" name="serviceAddress" placeholder="Address of event" required>
                                     </div>
                                     <div>
-                                        <label for="serviceTime">Available Times</label><br>
+                                        <label for="serviceTime">Event Start Time</label><br>
                                         <select id="serviceTime" name="serviceTime" value="">
                                             <option value="10:00 AM">10:00 AM</option>
                                             <option value="11:00 AM">11:00 AM</option>
@@ -699,21 +695,53 @@ function buildCustomerOrderForm() {
     redirect to a new page. idk.
 
     Written by Bryce Callahan 11/15/2024
+        updated by BC 11/19/2024
 */
 function buildAdminDashboard(admin)
 {
     // get app DOM
     const app = document.getElementById('app')
 
+    // init html
     let html = `
         <div class="container">
             <h2 style="color: var(--red);">Admin Dashboard</h2>
             <h4>${admin.email}</h4>
-
             <hr/>
+        `
 
-            <h5>All orders</h5>
-            <table>
+    // reports
+    html += '<hr/><h3 class="text-color-white">Reports</h3>'
+    html += buildAdminDataTable()
+    html += buildCustomerDataTable()
+    html += buildOrderDataTable()
+
+    html += '</div>'
+
+    // send to inner html
+    app.innerHTML = html
+}
+
+// Build Orders Table
+/*
+    this function builds the table that 
+    displays all orders and their respective
+    data.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildOrderDataTable()
+{
+    let html = `<h5>Orders</h5>`
+    // if orders don't exist
+    if(orderList.length < 1)
+    {   
+        html += `<p>No orders have been placed.</p>`
+    } else // else
+    {
+        // add order info to table
+        html += `
+           <table>
                 <tr>
                     <th>ID</th>
                     <th>Date Ordered</th>
@@ -727,33 +755,107 @@ function buildAdminDashboard(admin)
                     <th>Ordered By</th>
                     <th>Serviced By</th>
                     <th>Payment ID</th>
-                </tr>
-    `
-
-    orderList.forEach(order => {
-        html += `
-            <tr>
-                <td>${order.id}</td>
-                <td>${order.date}</td>
-                <td>${order.time}</td>
-                <td>${order.cancelled}</td>
-                <td>${order.serviceDate}</td>
-                <td>${order.serviceTime}</td>
-                <td>${order.duration}</td>
-                <td>${order.package}</td>
-                <td>${order.orderedBy}</td>
-                <td>${order.servicedBy}</td>
-                <td>${order.paymentId}</td>
-            </tr>
+                </tr> 
         `
-    });
-
+        // indivudal order info insertion
+        orderList.forEach(order => {
+            html += `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.date}</td>
+                    <td>${order.time}</td>
+                    <td>${order.cancelled}</td>
+                    <td>${order.serviceDate}</td>
+                    <td>${order.serviceTime}</td>
+                    <td>${order.serviceAddress}</td>
+                    <td>${order.duration}</td>
+                    <td>${order.package}</td>
+                    <td>${order.orderedBy}</td>
+                    <td>${order.servicedBy}</td>
+                    <td>${order.paymentId}</td>
+                </tr>
+            `
+        });
+        // close table
+        html += `</table>`
+    }
+    
+    // clsoe container
     html += `            
-        </table>
     </div>
     `
 
-    app.innerHTML = html
+    console.log(html)
+
+    return html
+}
+
+// Build Admin Table
+/*
+    this function builds the table that 
+    displays all Admin and their respective
+    data.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildAdminDataTable()
+{
+    // add order info to table
+    let html = `<h5>Admins</h5>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+        </tr> 
+    `
+    // indivudal order info insertion
+    adminList.forEach(admin => {
+    html += `
+        <tr>
+            <td>${admin.id}</td>
+            <td>${admin.email}</td>
+        </tr>
+    `
+    });
+    // close table
+    html += `</table>`
+
+    return html
+}
+
+// Build Customer Table
+/*
+    this function builds the table that 
+    displays all Customer and their respective
+    data.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildCustomerDataTable()
+{
+    // add order info to table
+    let html = `<h5>Customers</h5>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr> 
+    `
+    // indivudal order info insertion
+    customerList.forEach(customer => {
+    html += `
+        <tr>
+            <td>${customer.id}</td>
+            <td>${customer.fname} ${customer.lname}</td>
+            <td>${customer.email}</td>
+        </tr>
+    `
+    });
+    // close table
+    html += `</table>`
+
+    return html
 }
 
 // Clear Form Fields Function | Admin & Customer Order
