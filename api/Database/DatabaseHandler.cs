@@ -8,11 +8,11 @@ using MySqlConnector;
 
 namespace api.Databases
 {
-    public class Database
+    public class DatabaseHandler
     {
-        private readonly string? cs;
+        public string cs {get; private set;}
 
-        public Database()
+        public DatabaseHandler()
         {
             cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
         }
