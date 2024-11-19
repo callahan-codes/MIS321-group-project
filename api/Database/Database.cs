@@ -65,35 +65,12 @@ namespace api.Databases
             return myCustomers;
         }
 //updated Connor G 11/18/24
-        public async Task<List<Order>> GetAllOrders()
+       public async Task<List<Order>> GetAllOrders()
         {
 
-            List<Order> myOrders = [];
-
-            using var connection = new MySqlConnection(cs);
-            await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM wpwwyo4a82kv2jrd.orders;", connection);
-
-            using var reader = await command.ExecuteReaderAsync();
-           while (await reader.ReadAsync())
-            {
-                myOrders.Add(new Order
-                {
-                    // Populate with actual data from the reader
-                    Id = reader.GetInt32(0),  
-                    Date = reader.GetString(1), 
-                    Time = reader.GetString(2), 
-                    Package = reader.GetInt32(3),  
-                    PackageHours = reader.GetInt32(4),  
-                    Cancelled = reader.GetBoolean(5),  
-                    ServiceDate = reader.GetString(6),  
-                    ServiceTime = reader.GetString(7), 
-                    OrderedBy = reader.GetString(8),  
-                    ServicedBy = reader.GetString(9)  
-                });
-            }
-
-            return myOrders;
+            string sql = "SELECT * FROM orders WHERE Cancelled = 0;";
+            List<MySqlParameter> parms = new();
+            return await SelectOrders(sql, null);
         }
         public async Task<List<Payment>> GetAllPayments()
         {
