@@ -707,14 +707,20 @@ function buildAdminDashboard(admin)
         <div class="container">
             <h2 style="color: var(--red);">Admin Dashboard</h2>
             <h4>${admin.email}</h4>
-            <hr/>
-        `
+            <hr/><br/>
 
-    // reports
-    html += '<hr/><h3 class="text-color-white">Reports</h3>'
-    html += buildAdminDataTable()
-    html += buildCustomerDataTable()
-    html += buildOrderDataTable()
+            <div class="grid col-3">
+                <div class="admin-option-box" onclick="">
+                    <p>Managing Tool</p>
+                </div>
+                <div class="admin-option-box">
+                    <p></p>
+                </div>
+                <div class="admin-option-box" onclick="buildAllReports()">
+                    <p>Reports</p>
+                </div>
+            </div>
+        `
 
     html += '</div>'
 
@@ -856,6 +862,31 @@ function buildCustomerDataTable()
     html += `</table>`
 
     return html
+}
+
+// Build Reports
+/*
+    calls all functions that builds
+    a table showing db info
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildAllReports()
+{
+    // get app DOM
+    const app = document.getElementById('app')
+
+    let html = `
+        <div class="container">
+    `
+
+    html += buildAdminDataTable()
+    html += buildCustomerDataTable()
+    html += buildOrderDataTable()
+    html += `</div>`
+
+    // send to inner html
+    app.innerHTML += html
 }
 
 // Clear Form Fields Function | Admin & Customer Order

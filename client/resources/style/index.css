@@ -456,6 +456,25 @@ table tr td
     padding-top: 15px;
 }
 
+.admin-option-box
+{
+    width: 100%;
+    min-height: 100px;
+    background-color: var(--light-grey);
+    color: var(--dark-grey);
+    border: 3px solid var(--light-grey);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.admin-option-box:hover
+{
+    border-color: var(--red);
+    cursor: pointer;
+}
+
 /* links */
 a {
     color: var(--red);
