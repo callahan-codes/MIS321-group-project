@@ -711,15 +711,17 @@ function buildAdminDashboard(admin)
 
             <div class="grid col-3">
                 <div class="admin-option-box" onclick="">
-                    <p>Managing Tool</p>
+                    <p>Admin Tools</p>
                 </div>
                 <div class="admin-option-box">
-                    <p></p>
+                    <p>Customer Tools</p>
                 </div>
                 <div class="admin-option-box" onclick="buildAllReports()">
                     <p>Reports</p>
                 </div>
             </div>
+
+            <div id="toolbox"></div>
         `
 
     html += '</div>'
@@ -791,8 +793,6 @@ function buildOrderDataTable()
     </div>
     `
 
-    console.log(html)
-
     return html
 }
 
@@ -850,10 +850,11 @@ function buildCustomerDataTable()
     `
     // indivudal order info insertion
     customerList.forEach(customer => {
+        console.log(customer)
     html += `
         <tr>
             <td>${customer.id}</td>
-            <td>${customer.fname} ${customer.lname}</td>
+            <td>${customer.fName} ${customer.lName}</td>
             <td>${customer.email}</td>
         </tr>
     `
@@ -874,19 +875,16 @@ function buildCustomerDataTable()
 function buildAllReports()
 {
     // get app DOM
-    const app = document.getElementById('app')
+    const app = document.getElementById('toolbox')
 
-    let html = `
-        <div class="container">
-    `
+    let html = ``
 
     html += buildAdminDataTable()
     html += buildCustomerDataTable()
     html += buildOrderDataTable()
-    html += `</div>`
 
     // send to inner html
-    app.innerHTML += html
+    app.innerHTML = html
 }
 
 // Clear Form Fields Function | Admin & Customer Order
