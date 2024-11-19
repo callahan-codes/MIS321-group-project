@@ -15,6 +15,7 @@ namespace api.Controllers
     */
 
     [Route("api/[controller]")]
+    [ApiController]
     public class AdminController : Controller
     {
         // database instance

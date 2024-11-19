@@ -1,5 +1,6 @@
 using api.Handlers;
 using api.Models;
+using MySqlConnector;
 
 namespace api.Databases
 {
@@ -16,6 +17,10 @@ namespace api.Databases
         private CustomerHandler customerHandler = new CustomerHandler();
         private static List<Customer> AllCustomer = new List<Customer>();
 
+        // Order handler & static list
+        private OrderHandler orderHandler = new OrderHandler();
+        private static List<Order> AllOrder = new List<Order>();
+
         // put ur handler and static list below this. COMMENT YOUR CODE. EVERYTHING.
 
         public Database()
@@ -24,7 +29,7 @@ namespace api.Databases
                 we will use the db made by jeb after we have all tested our code on localhost.
                 cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
             */
-            cs = "Server=127.0.0.1;User ID=root;Password=MyPassword;Database=titletowncatering";
+            cs = "Server=127.0.0.1;User ID=root;Password=Gasmask2910!;Database=titletowncatering";
         }
 
         /*
@@ -41,7 +46,7 @@ namespace api.Databases
                 AllAdmin = await adminHandler.GetAllAdmins(cs);
             }
 
-            // return recipe list
+            // return admin list
             return AllAdmin;
         }
 
@@ -81,7 +86,7 @@ namespace api.Databases
                 AllCustomer = await customerHandler.GetAllCustomers(cs);
             }
 
-            // return recipe list
+            // return customer list
             return AllCustomer;
         }
 
@@ -104,6 +109,36 @@ namespace api.Databases
                 // set list from admin handler
                 await customerHandler.DeleteCustomer(cs, customerID);
                 await GetAllCustomers();
+            }
+        }
+
+
+        /*
+            ORDER TASKS
+
+                Written by Connor G 11/18/2024
+                updated by BC 11/19/2024
+        */
+        // Get all customers
+        public async Task<List<Order>> GetAllOrders()
+        {
+            if(cs != null)
+            {
+                // set list from order handler
+                AllOrder = await orderHandler.GetAllOrders(cs);
+            }
+            
+            // return data
+            return AllOrder;
+        }
+        // Add Order
+        public async void AddNewOrder(Order Order)
+        {
+            if(cs != null)
+            {
+                // set list from admin handler
+                await orderHandler.AddNewOrder(cs, Order);
+                await GetAllOrders();
             }
         }
     }
