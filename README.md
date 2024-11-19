@@ -1,4 +1,5 @@
 # MIS321-group-project
+<hr/>
 <h1>Requirements</h1>
 <p><strong>Make sure yall save the <u>pulled repository</u> to your local machine <u>before making any changes and pushing them</u>. We all need to be responsible for having an extra non-edited project folder everytime we pull from the repo!!! This is so if anyone pushes a project with errors, we have the backup.</strong></p>
 
@@ -23,6 +24,7 @@
 <ul>
   <li>Repo touch ups before start</li>
   <li>Created Models c#</li>
+  <li>Created base html, css, js</li>
   <li>Created display screen on admin login/ customer order button click js/css</li>
 </ul>
 
@@ -38,11 +40,39 @@
   <li>Created a clear all fields function to clear the fields of the specifid-by-param form</li>
 </ul>
 
+
+<h2>Update 11/7/2024 | Connor</h2>
+<ul><li>Created Customer Order Form</li></ul>
+
+
+
+<h2>11/10/2024 | BC</h2>
+<ul>
+  <li>Merged Bryces and Connors code</li>
+  <li>Bryce made the admin forms</li>
+  <li>Connor made the customer form</li>
+</ul>
+
+
 <h2>11/8/2024 | HW</h2>
 <ul>
   <li>Created Database folder within the api folder </li>
   <li>Created SQL script with all needed tables and TitleTownCatering Database within the Database Folder</li>
   <li>Created Hayden Branch </li>
+</ul>
+
+
+<h2>11/12/2024 | BC</h2>
+<ul>
+  <li>Merged all tasks from each member to main.</li>
+</ul>
+
+<h2>11/15/2024 | BC</h2>
+<ul>
+  <li>Created Admin handler and controllers with their respective methods.</li>
+  <li>Created Customer handler and controllers with their respective methods.</li>
+  <li>Created the Admin/Customer dashboard, which shows logged in admin data/functions and the customer dash will eventually show the customer order (and past orders?)</li>
+  <li>Updated CSS to support the forms in mobile</li>
 </ul>
 
 <hr/>

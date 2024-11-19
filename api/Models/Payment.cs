@@ -11,7 +11,7 @@ namespace api.Models
         // customer id
         public int CustomerId { get; set; }
         // payment date
-        public string? PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
         // payment amount
         public double PaymentAmount { get; set; }
         // payment method
