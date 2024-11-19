@@ -11,22 +11,12 @@ namespace api.Models
         public string? Date  { get; set; }
         // order time
         public string? Time { get; set; }
+        // is order cancelled
+        public bool Cancelled { get; set; }
         // order duration
         public int Duration { get; set; }
         // package ordered (1-3)
         public int Package { get; set; }
-        /* 
-            do we even need order cost? we can always just compute it
-            whenever we pull the data and assign it to a variable.
-            lmk what yall think when you read this.
-
-            we should also consider using doubles instead of ints 
-            so we can get cents for payment.
-
-            public double OrderCost { get; set; }
-        */
-        // is order cancelled
-        public bool Cancelled { get; set; }
         // when the service is to be provided
         public string? ServiceDate { get; set; }
         // what time the service is to be provided

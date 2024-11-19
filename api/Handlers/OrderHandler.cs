@@ -75,7 +75,7 @@ namespace api.Handlers
             // paymentid
 
             // command text
-            command.CommandText = @$"INSERT INTO order(OrderId, OrderDate, OrderTime, OrderCancelled, ServiceDate, ServiceTime, ServiceAddress, ServiceDuration, PackageType, OrderedBy, ServicedBy, PaymentId) 
+            command.CommandText = @$"INSERT INTO titletowncatering.order(OrderId, OrderDate, OrderTime, OrderCancelled, ServiceDate, ServiceTime, ServiceAddress, ServiceDuration, PackageType, OrderedBy, ServicedBy, PaymentId) 
             VALUES(@orderID, @orderDate, @orderTime, @orderCancelled, @orderServiceDate, @orderServiceTime, @orderServiceAddress, @orderDuration, @orderPackage, @orderedBy, @servicedBy, @paymentID);";
 
             Console.WriteLine(command.CommandText);

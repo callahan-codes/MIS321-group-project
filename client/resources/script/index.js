@@ -394,7 +394,7 @@ async function createNewOrder()
             paymentId: 1 // will replace this after we get payment
         }
 
-        console.log(newOrder)
+        console.log(orderList)
 
         // add order to order list
         orderList.push(newOrder)
