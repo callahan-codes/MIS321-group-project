@@ -13,6 +13,8 @@ async function handleOnLoad()
     await getAllAdmins()
     // get all customers
     await getAllCustomers()
+    // get all orders
+    await getAllOrders();
 
     // loader
     loaderDisplay()
@@ -118,6 +120,59 @@ async function getAllCustomers()
     }
 }
 
+// Get all orders api call
+/*
+    this function gets the order api URL,
+    fetches for a response, and assigns the
+    response data to the main orderList array.
+
+    Written by Bryce Callahan 11/15/2024
+*/
+async function getAllOrders()
+{
+    // get admin url
+    const orderURL = url + 'order';
+
+    // log
+    console.log(`Fetching Order API from ${orderURL}...`)
+
+    // try 
+    try
+    {
+        // if url isn't null
+        if(url != null)
+        {
+            // fetch url
+            let response = await fetch(orderURL)
+
+            // error handle | https://dev.to/dionarodrigues/fetch-api-do-you-really-know-how-to-handle-errors-2gj0
+            if(response.ok)
+            {
+                // assign recipe list to json
+                let data = await response.json()
+                orderList = data
+
+                // log
+                console.log('API fetched: ' + orderList.length + ' orders pulled from the database.')
+
+            } else 
+            {
+                // log
+                console.log("API FETCH ERROR: " + response.status)
+            }
+        }
+
+    } catch (error) // catch error
+    {
+        // log error
+        alert("Promise failed\n\n" + error + "\n\nPlease try again by reloading the page or checking your server.")
+    }
+
+    orderList.forEach(element => {
+        console.log(element)
+    });
+}
+
 // Admin Creation
 /*
     this function creates a new admin locally.
@@ -216,6 +271,7 @@ async function createNewAdmin()
 /*
     Written by Connor Gilstrap 11/7/2024
         Updated by Bryce Callahan 11/15/2024
+        Updated by Bryce Callahan 11/19/2024
 */
 async function createNewOrder()
 {
@@ -225,6 +281,7 @@ async function createNewOrder()
     const email = document.getElementById('customerEmail').value
     const packageType = document.getElementById('package').value
     const serviceAddress = document.getElementById('serviceAddress').value
+    const serviceDuration = document.getElementById('serviceDuration').value
     const serviceDate = document.getElementById('serviceDate').value
     const serviceTime = document.getElementById('serviceTime').value
     const alert = document.getElementById('alert')
@@ -273,9 +330,22 @@ async function createNewOrder()
         alert.style.backgroundColor = 'var(--alert-pass)'
         alert.innerHTML = `Your order for ${packageType} on ${serviceDate} at ${serviceTime} has been created.`
 
+        // get today's date | https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        // get today's time | https://stackoverflow.com/questions/10599148/how-do-i-get-the-current-time-only-in-javascript
+        let time = new Date().toLocaleTimeString();
+    
+        // format date
+        today = yyyy + '-' + mm + '-' + dd;
+        let date = today.toString()
+
         // create new customer object and push to db
         // get customer url
-        const customerURL = url + 'customer';
+        const customerURL = url + 'customer'
 
         // create new customer
         let newCustomer = {
@@ -283,6 +353,26 @@ async function createNewOrder()
             fname: fname,
             lname: lname,
             email: email
+        }
+
+        // create new order object and push to db
+        // get order url
+        const orderURL = url + 'order'
+
+        // create new order object
+        let newOrder = {
+            id: orderList.length + 1,
+            date: date,
+            time: time,
+            cancelled: false,
+            serviceDate: serviceDate,
+            serviceTime: serviceTime,
+            serviceAddress: serviceAddress,
+            duration: parseInt(serviceDuration),
+            package: parseInt(packageType),
+            orderedBy: newCustomer.id,      
+            servicedBy: 1,
+            paymentId: 1 // will replace this after we get payment
         }
 
         // add to main customer list
@@ -304,26 +394,29 @@ async function createNewOrder()
             console.log(error)
         }
 
-        // create new order object
-        let newOrder = {
-            email: email,
-            packageType: packageType,
-            serviceAddress: serviceAddress,
-            serviceDate: serviceDate,
-            serviceTime: serviceTime,
-            cancelled: false
-        }
         // add order to order list
         orderList.push(newOrder)
-
-        console.log(orderList)
+        try 
+        {
+            // post | save to db through controller
+            await fetch(orderURL, {
+                method: "POST",
+                body: JSON.stringify(newOrder),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+            
+        } catch (error) 
+        {
+            // log
+            console.log(error)
+        }
 
         // clear order form fields
         clearAllFormFields('customerOrderForm')
     }
 }
-
-
 
 // DOM MANIPULATION FUNCTIONS
 // Loader Screen Function
@@ -488,7 +581,7 @@ function adminLoginCheck()
             successful = true
             adminLoggedIn = admin
         }
-    });
+    })
 
     // if successful
     if(successful)
@@ -511,7 +604,7 @@ function adminLoginCheck()
 */
 function buildCustomerOrderForm() {
     // get app DOM
-    const app = document.getElementById('app');
+    const app = document.getElementById('app')
 
     // HTML content for customer order form
     let html = `<div class="container">
@@ -550,7 +643,7 @@ function buildCustomerOrderForm() {
                                         <input type="text" id="serviceAddress" name="serviceAddress" placeholder="Address of event" required>
                                     </div>
                                     <div>
-                                        <label for="serviceTime">Available Times</label><br>
+                                        <label for="serviceTime">Event Start Time</label><br>
                                         <select id="serviceTime" name="serviceTime" value="">
                                             <option value="10:00 AM">10:00 AM</option>
                                             <option value="11:00 AM">11:00 AM</option>
@@ -568,11 +661,19 @@ function buildCustomerOrderForm() {
                                         </select>
                                     </div>
                                     <div>
+                                        <label for="serviceDuration">Number of Hours</label><br>
+                                        <select id="serviceDuration" name="serviceDuration">
+                                            <option value="1">1 hour</option>
+                                            <option value="2">2 hours</option>
+                                            <option value="3">3 hours</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-span-all">
                                         <label for="package">Select Package</label><br>
                                         <select id="package" name="package">
-                                            <option value="Package 1">Package 1</option>
-                                            <option value="Package 2">Package 2</option>
-                                            <option value="Package 3">Package 3</option>
+                                            <option value="1">Package 1</option>
+                                            <option value="2">Package 2</option>
+                                            <option value="3">Package 3</option>
                                         </select>
                                     </div>
                                 </div>
@@ -594,24 +695,228 @@ function buildCustomerOrderForm() {
     redirect to a new page. idk.
 
     Written by Bryce Callahan 11/15/2024
+        updated by BC 11/19/2024
 */
 function buildAdminDashboard(admin)
 {
     // get app DOM
-    const app = document.getElementById('app');
+    const app = document.getElementById('app')
 
+    // init html
     let html = `
         <div class="container">
             <h2 style="color: var(--red);">Admin Dashboard</h2>
             <h4>${admin.email}</h4>
+            <hr/><br/>
 
-            <hr/>
+            <div class="grid col-3">
+                <div class="admin-option-box" onclick="buildAdminTools()">
+                    <p>Admin Tools</p>
+                </div>
+                <div class="admin-option-box">
+                    <p>Customer Tools</p>
+                </div>
+                <div class="admin-option-box" onclick="buildAllReports()">
+                    <p>Reports</p>
+                </div>
+            </div>
 
-            <h5>All orders</h5>
-        </div>
+            <div id="toolbox"></div>
+        `
+
+    html += '</div>'
+
+    // send to inner html
+    app.innerHTML = html
+}
+
+// Build Orders Table
+/*
+    this function builds the table that 
+    displays all orders and their respective
+    data.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildOrderDataTable()
+{
+    let html = `<h5>Orders</h5>`
+    // if orders don't exist
+    if(orderList.length < 1)
+    {   
+        html += `<p>No orders have been placed.</p>`
+    } else // else
+    {
+        // add order info to table
+        html += `
+           <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Date Ordered</th>
+                    <th>Time Ordered</th>
+                    <th>Cancelled Status</th>
+                    <th>Service Date</th>
+                    <th>Service Time</th>
+                    <th>Service Address</th>
+                    <th>Duration (hours)</th>
+                    <th>Package Type</th>
+                    <th>Ordered By</th>
+                    <th>Serviced By</th>
+                    <th>Payment ID</th>
+                </tr> 
+        `
+        // indivudal order info insertion
+        orderList.forEach(order => {
+            html += `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.date}</td>
+                    <td>${order.time}</td>
+                    <td>${order.cancelled}</td>
+                    <td>${order.serviceDate}</td>
+                    <td>${order.serviceTime}</td>
+                    <td>${order.serviceAddress}</td>
+                    <td>${order.duration}</td>
+                    <td>${order.package}</td>
+                    <td>${order.orderedBy}</td>
+                    <td>${order.servicedBy}</td>
+                    <td>${order.paymentId}</td>
+                </tr>
+            `
+        });
+        // close table
+        html += `</table>`
+    }
+    
+    // clsoe container
+    html += `            
+    </div>
     `
 
-    app.innerHTML = html;
+    return html
+}
+
+// Build Admin Table
+/*
+    this function builds the table that 
+    displays all Admin and their respective
+    data.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildAdminDataTable()
+{
+    // add order info to table
+    let html = `<h5>Admins</h5>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+        </tr> 
+    `
+    // indivudal order info insertion
+    adminList.forEach(admin => {
+    html += `
+        <tr>
+            <td>${admin.id}</td>
+            <td>${admin.email}</td>
+        </tr>
+    `
+    });
+    // close table
+    html += `</table>`
+
+    return html
+}
+
+// Build Customer Table
+/*
+    this function builds the table that 
+    displays all Customer and their respective
+    data.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildCustomerDataTable()
+{
+    // add order info to table
+    let html = `<h5>Customers</h5>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr> 
+    `
+    // indivudal order info insertion
+    customerList.forEach(customer => {
+        console.log(customer)
+    html += `
+        <tr>
+            <td>${customer.id}</td>
+            <td>${customer.fName} ${customer.lName}</td>
+            <td>${customer.email}</td>
+        </tr>
+    `
+    });
+    // close table
+    html += `</table>`
+
+    return html
+}
+
+// Build Reports
+/*
+    calls all functions that builds
+    a table showing db info
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildAllReports()
+{
+    // get app DOM
+    const app = document.getElementById('toolbox')
+
+    let html = ``
+
+    html += buildAdminDataTable()
+    html += buildCustomerDataTable()
+    html += buildOrderDataTable()
+
+    // send to inner html
+    app.innerHTML = html
+}
+
+// Build Admin tools
+/*
+    calls all functions that admins
+    can use as a tool.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildAdminTools()
+{
+    // get app DOM
+    const app = document.getElementById('toolbox')
+
+    let html = ``
+
+    html += buildAdminEditingTool()
+
+    // send to inner html
+    app.innerHTML = html
+}
+
+// Build Admin Editing tools
+/*
+    this allows admins to change other admin 
+    data in the db.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildAdminEditingTool()
+{
+    
 }
 
 // Clear Form Fields Function | Admin & Customer Order
@@ -635,11 +940,11 @@ function clearAllFormFields(formToClear)
             break
 
         case 'customerOrderForm':
-            document.getElementById('customerEmail').value = '';
-            document.getElementById('package').value = '';
-            document.getElementById('serviceAddress').value = '';
-            document.getElementById('serviceDate').value = '';
-            document.getElementById('serviceTime').value = '';
+            document.getElementById('customerEmail').value = ''
+            document.getElementById('package').value = ''
+            document.getElementById('serviceAddress').value = ''
+            document.getElementById('serviceDate').value = ''
+            document.getElementById('serviceTime').value = ''
             break
 
         // default hide alert

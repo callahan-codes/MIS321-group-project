@@ -75,6 +75,14 @@
   <li>Updated CSS to support the forms in mobile</li>
 </ul>
 
+<h2>11/19/2024 | BC</h2>
+<ul>
+  <li>Merged Bryce and connors code.</li>
+  <li>Updated Order model (was missing some data columns to be inserted into the db) and customer order form.</li>
+  <li>Updated Connor's orderhandler to meet expectations of new Order model.</li>
+  <li>Built an admin dashboard navigation and report functions.</li>
+</ul>
+
 <hr/>
 <hr/>
 <hr/>
