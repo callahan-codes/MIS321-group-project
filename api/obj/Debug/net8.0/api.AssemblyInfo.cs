@@ -14,9 +14,13 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 <<<<<<< HEAD
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c23e5d50762e9dde102ae35441402e3f96c6c408")]
 =======
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5750ea4defecdfd7919feaec8651527bffb38fa8")]
+>>>>>>> merged-testing
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64cf973e4383fd7916f726e21599946a5a4d130b")]
 >>>>>>> merged-testing
 [assembly: System.Reflection.AssemblyProductAttribute("api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("api")]
