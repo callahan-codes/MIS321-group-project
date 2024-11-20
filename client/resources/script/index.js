@@ -710,7 +710,7 @@ function buildAdminDashboard(admin)
             <hr/><br/>
 
             <div class="grid col-3">
-                <div class="admin-option-box" onclick="">
+                <div class="admin-option-box" onclick="buildAdminTools()">
                     <p>Admin Tools</p>
                 </div>
                 <div class="admin-option-box">
@@ -885,6 +885,38 @@ function buildAllReports()
 
     // send to inner html
     app.innerHTML = html
+}
+
+// Build Admin tools
+/*
+    calls all functions that admins
+    can use as a tool.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildAdminTools()
+{
+    // get app DOM
+    const app = document.getElementById('toolbox')
+
+    let html = ``
+
+    html += buildAdminEditingTool()
+
+    // send to inner html
+    app.innerHTML = html
+}
+
+// Build Admin Editing tools
+/*
+    this allows admins to change other admin 
+    data in the db.
+
+    Written by Bryce Callahan 11/19/2024
+*/
+function buildAdminEditingTool()
+{
+    
 }
 
 // Clear Form Fields Function | Admin & Customer Order
