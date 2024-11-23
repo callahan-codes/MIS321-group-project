@@ -73,6 +73,29 @@
   <li>Merged all tasks from each member to main.</li>
 </ul>
 
+<h2>11/15/2024 | BC</h2>
+<ul>
+  <li>Created Admin handler and controllers with their respective methods.</li>
+  <li>Created Customer handler and controllers with their respective methods.</li>
+  <li>Created the Admin/Customer dashboard, which shows logged in admin data/functions and the customer dash will eventually show the customer order (and past orders?)</li>
+  <li>Updated CSS to support the forms in mobile</li>
+</ul>
+
+<h2>11/19/2024 | BC</h2>
+<ul>
+  <li>Merged Bryce and connors code.</li>
+  <li>Updated Order model (was missing some data columns to be inserted into the db) and customer order form.</li>
+  <li>Updated Connor's orderhandler to meet expectations of new Order model.</li>
+  <li>Built an admin dashboard navigation and report functions.</li>
+</ul>
+
+<h2>11/21/2024 | BC</h2>
+<ul>
+  <li>Merged Bryce and Haydens code.</li>
+  <li>Updated Database sql script to a bool value for paymentstatus.</li>
+  <li>Updated some payment handler logic and built the payment api in indexjs.</li>
+</ul>
+
 <hr/>
 <hr/>
 <hr/>

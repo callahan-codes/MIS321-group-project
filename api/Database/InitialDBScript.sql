@@ -24,33 +24,33 @@ CREATE TABLE PAYMENT
   PaymentId INT NOT NULL,
   OrderId INT NOT NULL,
   CustId INT NOT NULL,
-  PaymentDate DATE NOT NULL,
+  PaymentDate VARCHAR(24) NOT NULL,
   PaymentAmount FLOAT NOT NULL,
   PaymentMethod VARCHAR(24) NOT NULL,
-  PaymentStatus VARCHAR(12) NOT NULL,
+  PaymentStatus BIT NOT NULL,
   PRIMARY KEY (PaymentId)
 );
 
 CREATE TABLE `ORDER`
 (
   OrderId INT NOT NULL,
-  OrderDate DATE NOT NULL,
+  OrderDate VARCHAR(12) NOT NULL,
   OrderTime VARCHAR(12) NOT NULL,
-  OrderCancelled VARCHAR(12) NOT NULL,
-  ServiceDate DATE NOT NULL,
+  OrderCancelled BIT NOT NULL,
+  ServiceDate VARCHAR(12) NOT NULL,
   ServiceTime VARCHAR(12) NOT NULL,
-  OrderedBy VARCHAR(24) NOT NULL,
-  ServicedBy VARCHAR(24) NOT NULL,
-  CustId INT NOT NULL,
+  ServiceAddress VARCHAR(75) NOT NULL,
+  ServiceDuration INT NOT NULL,
+  PackageType INT NOT NULL,
+  OrderedBy INT NOT NULL,
+  ServicedBy INT NOT NULL, 
   PaymentId INT,
   PRIMARY KEY (OrderId),
-  FOREIGN KEY (CustId) REFERENCES CUSTOMER(CustId),
   FOREIGN KEY (PaymentId) REFERENCES PAYMENT(PaymentId)
 );
 
 CREATE TABLE PACKAGE
 (
-  NumHours INT NOT NULL,
   PackageCost FLOAT NOT NULL,
   PackageName VARCHAR(24) NOT NULL,
   OrderId INT NOT NULL,
