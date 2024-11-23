@@ -6,6 +6,7 @@ let adminList = []
 let customerList = []
 let orderList = []
 let paymentList = []
+let servicedList = []
 
 // Handle Document OnLoad
 async function handleOnLoad()
@@ -18,6 +19,8 @@ async function handleOnLoad()
     await getAllOrders();
     // get all payments
     await getAllPayments();
+    // get all serviced
+    await getAllServiced();
 
     // loader
     loaderDisplay()
@@ -210,6 +213,55 @@ async function getAllPayments()
 
                 // log
                 console.log('API fetched: ' + paymentList.length + ' orders pulled from the database.')
+
+            } else 
+            {
+                // log
+                console.log("API FETCH ERROR: " + response.status)
+            }
+        }
+
+    } catch (error) // catch error
+    {
+        // log error
+        alert("Promise failed\n\n" + error + "\n\nPlease try again by reloading the page or checking your server.")
+    }
+}
+
+// Get all serviced api call
+/*
+    this function gets the service api URL,
+    fetches for a response, and assigns the
+    response data to the main orderList array.
+
+    Written by Bryce Callahan 11/23/2024
+*/
+async function getAllServiced()
+{
+    // get admin url
+    const servicedURL = url + 'serviced';
+
+    // log
+    console.log(`Fetching Serviced API from ${servicedURL}...`)
+
+    // try 
+    try
+    {
+        // if url isn't null
+        if(url != null)
+        {
+            // fetch url
+            let response = await fetch(servicedURL)
+
+            // error handle | https://dev.to/dionarodrigues/fetch-api-do-you-really-know-how-to-handle-errors-2gj0
+            if(response.ok)
+            {
+                // assign recipe list to json
+                let data = await response.json()
+                servicedList = data
+
+                // log
+                console.log('API fetched: ' + servicedList.length + ' orders pulled from the database.')
 
             } else 
             {
@@ -795,6 +847,7 @@ function buildAdminDashboard(admin)
 */
 function buildOrderDataTable()
 {
+    const app = document.getElementById('toolbox')
     let html = `<h5>Orders</h5>`
     // if orders don't exist
     if(orderList.length < 1)
@@ -848,7 +901,7 @@ function buildOrderDataTable()
     </div>
     `
 
-    return html
+    app.innerHTML = html
 }
 
 // Build Admin Table
@@ -894,6 +947,9 @@ function buildAdminDataTable()
 */
 function buildCustomerDataTable()
 {
+    // get app DOM
+    const app = document.getElementById('toolbox')
+
     // add order info to table
     let html = `<h5>Customers</h5>
     <table>
@@ -917,7 +973,7 @@ function buildCustomerDataTable()
     // close table
     html += `</table>`
 
-    return html
+    app.innerHTML = html
 }
 
 // Build Reports
@@ -935,19 +991,10 @@ function buildReportNav()
     let html = `
         <div class="tool-nav-flexbox">
             <div onclick="buildDailyOrderReport()">Daily Orders</div>
-            <div>Weekly Orders</div>
-            <div>Monthly Orders</div>
-            <div>All Orders</div>
-            <div>All Customers</div>
-            <div>Unpaid Orders</div>
+            <div onclick="buildOrderDataTable()">All Orders</div>
+            <div onclick="buildCustomerDataTable()">All Customers</div>
         </div>
     `
-
-    // html += buildAdminDataTable()
-    // html += buildCustomerDataTable()
-    // html += buildOrderDataTable()
-
-    // send to inner html
     app.innerHTML = html
 }
 
@@ -1015,6 +1062,7 @@ function buildAdminTools()
     // send to inner html
     app.innerHTML = html
 }
+
 
 // Clear Form Fields Function | Admin & Customer Order
 /*

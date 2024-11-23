@@ -25,6 +25,12 @@ namespace api.Databases
         private PaymentHandler paymentHandler = new PaymentHandler();
         private static List<Payment> AllPayment = new List<Payment>();
 
+        // Serviced handler & static list
+        private ServicedHandler servicedHandler = new ServicedHandler();
+        private static List<Serviced> AllServiced = new List<Serviced>();
+
+
+
 
         public Database()
         {
@@ -163,6 +169,26 @@ namespace api.Databases
             
             // return data
             return AllPayment;
+        }
+
+
+        /*
+            Serviced TASKS
+
+                Written by Jeb 11/23/2024
+                updated by BC 11/23/2024
+        */
+        // Get all customers
+        public async Task<List<Serviced>> GetAllServiced()
+        {
+            if(cs != null)
+            {
+                // set list from payment handler
+                AllServiced = await servicedHandler.GetAllServiced(cs);
+            }
+            
+            // return data
+            return AllServiced;
         }
     }
 }
