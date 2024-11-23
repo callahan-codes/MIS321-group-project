@@ -935,9 +935,7 @@ function buildReportNav()
     let html = `
         <div class="tool-nav-flexbox">
             <div onclick="buildDailyOrderReport()">Daily Orders</div>
-            <div>Weekly Orders</div>
-            <div>Monthly Orders</div>
-            <div>All Orders</div>
+            <div onclick="buildOrderDataTable()">All Orders</div>
             <div>All Customers</div>
             <div>Unpaid Orders</div>
         </div>
