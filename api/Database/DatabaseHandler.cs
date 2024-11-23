@@ -7,7 +7,7 @@ namespace api.Databases
     public class Database
     {
         // db connection string
-        private readonly string? cs;
+        public string cs {get; set;}
 
         // Player handler & static list
         private AdminHandler adminHandler = new AdminHandler();

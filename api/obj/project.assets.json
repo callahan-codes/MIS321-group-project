@@ -579,26 +579,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\bryce\\.nuget\\packages\\": {}
+    "C:\\Users\\ryanc\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bryce\\OneDrive\\Documents\\Class\\Fall 2024\\MIS321\\Project\\Code\\MIS321-group-project\\api\\api.csproj",
+      "projectUniqueName": "C:\\Users\\ryanc\\OneDrive\\Documents\\JEBCODE\\version2\\MIS321-group-project\\api\\api.csproj",
       "projectName": "api",
-      "projectPath": "C:\\Users\\bryce\\OneDrive\\Documents\\Class\\Fall 2024\\MIS321\\Project\\Code\\MIS321-group-project\\api\\api.csproj",
-      "packagesPath": "C:\\Users\\bryce\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bryce\\OneDrive\\Documents\\Class\\Fall 2024\\MIS321\\Project\\Code\\MIS321-group-project\\api\\obj\\",
+      "projectPath": "C:\\Users\\ryanc\\OneDrive\\Documents\\JEBCODE\\version2\\MIS321-group-project\\api\\api.csproj",
+      "packagesPath": "C:\\Users\\ryanc\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ryanc\\OneDrive\\Documents\\JEBCODE\\version2\\MIS321-group-project\\api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\bryce\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\ryanc\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -615,8 +613,9 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "direct"
-      }
+        "auditMode": "all"
+      },
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -650,7 +649,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

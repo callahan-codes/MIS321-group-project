@@ -66,3 +66,14 @@ C:\Users\jebbr\OneDrive\Documents\source\Fall2024Repos\GroupProject\version1\MIS
 C:\Users\jebbr\OneDrive\Documents\source\Fall2024Repos\GroupProject\version1\MIS321-group-project\api\obj\Debug\net8.0\api.pdb
 C:\Users\jebbr\OneDrive\Documents\source\Fall2024Repos\GroupProject\version1\MIS321-group-project\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 C:\Users\jebbr\OneDrive\Documents\source\Fall2024Repos\GroupProject\version1\MIS321-group-project\api\obj\Debug\net8.0\ref\api.dll
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.csproj.AssemblyReference.cache
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.AssemblyInfoInputs.cache
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.AssemblyInfo.cs
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.csproj.CoreCompileInputs.cache
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.sourcelink.json
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.dll
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\refint\api.dll
+C:\Users\ryanc\OneDrive\Documents\JEBCODE\version2\MIS321-group-project\api\obj\Debug\net8.0\api.pdb
