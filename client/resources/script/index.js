@@ -996,51 +996,6 @@ function buildDailyOrderReport()
     app.innerHTML = html
 }
 
-// Show daily orders
-/*
-    this functions shows all orders that 
-    were placed today.
-
-    written by BC 11/22/2024
-*/
-function buildWeeklyOrderReport()
-{
-
-    let app = document.getElementById('toolbox')
-
-    // add info to table
-    let html = `<h5>Today's Orders</h5>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Ordered</th>
-            <th>Event Date</th>
-            <th>Event Time</th>
-            <th>Event Duration</th>
-        </tr> 
-    `
-
-    orderList.forEach(order => {
-        if(order.date == GetDate())
-        {
-            html += `
-                <tr>
-                    <td>${order.id}</td>
-                    <td>${order.date} ${order.time}</td>
-                    <td>${order.serviceDate}</td>
-                    <td>${order.serviceTime}</td>
-                    <td>${order.duration} hours</td>
-                </tr>
-            `
-        }
-    })
-
-    // close table
-    html += `</table>`
-
-    app.innerHTML = html
-}
-
 // Build Admin tools
 /*
     calls all functions that admins
