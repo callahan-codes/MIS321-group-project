@@ -183,12 +183,31 @@ namespace api.Databases
         {
             if(cs != null)
             {
-                // set list from payment handler
+                // set list from serviced handler
                 AllServiced = await servicedHandler.GetAllServiced(cs);
             }
             
             // return data
             return AllServiced;
+        }
+        public async void AddNewServiced(Serviced serviced)
+        {
+            if(cs != null)
+            {
+                // set list from serviced handler
+                await servicedHandler.PostServiced(serviced, cs);
+                await GetAllServiced();
+            }
+        }
+
+        public async void DeleteServiced(int id)
+        {
+            if(cs != null)
+            {
+                // set list from serviced handler
+                await servicedHandler.DeleteServiced(id, cs);
+                await GetAllServiced();
+            }
         }
     }
 }

@@ -44,7 +44,7 @@ namespace api.Handlers
 
         // DELETE METHOD
 
-        public async Task DeleteServiced(int orderId, int adminId, string cs){
+        public async Task DeleteServiced(int id, string cs){
             // THIS METHOD MAY NEED 2 IDS TO BE PASSED SO YEAH
             // I AM NOT GOING TO UPDATE THIS METHOD UNTIL I KNOW IF WE ARE SOFT DELETING
             using var connection = new MySqlConnection(cs);
