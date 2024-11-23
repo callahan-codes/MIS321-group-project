@@ -1,55 +1,37 @@
-using api.Databases;
 using api.Models;
-using Microsoft.AspNetCore.Http;
+using api.Databases;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-//Created by Connor G 11/18/24
 namespace api.Controllers
 {
-    public class OrderController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class OrderController : ControllerBase
     {
-         // GET: api/order
+        // database instance
+        private Database database = new Database();
+
+        // GET
         [HttpGet]
         public Task<List<Order>> Get()
         {
-            Database myDatabase = new();
-            return myDatabase.GetAllOrders();
+            // get all admin
+            return database.GetAllOrders();
         }
 
-        // GET: api/order/{id}
-        [HttpGet("{id}", Name = "GetOrder")]
-        public async Task<Order> Get(int id)
-        {
-            Database myDatabase = new();
-            var orders = await myDatabase.GetOrderById(id);
-            return orders.Count > 0 ? orders[0] : null;
-        }
-
-        // POST: api/order
+        // POST
         [HttpPost]
-        public async Task Post([FromBody] Order value)
+        public void Post([FromBody] Order myOrder)
         {
-            Database myDatabase = new();
-            await myDatabase.InsertOrder(value);
+            // add new admin
+            database.AddNewOrder(myOrder);
         }
 
-        // DELETE: api/order/{id}
-        [HttpDelete("{id}")]
-        public async Task Delete(int id)
-        {
-            Database myDatabase = new();
-            await myDatabase.DeleteOrder(id);
-        }
-
-        // PUT: api/order/{id}
-        [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] Order value)
-        {
-            Database myDatabase = new();
-            await myDatabase.UpdateOrder(value, id);
-        }
+        // // DELETE
+        // [HttpDelete("{id}")]
+        // public void Delete(int id)
+        // {
+        //     // "delete" admin
+        //     database.DeleteCustomer(id);
+        // }
     }
 }
-    

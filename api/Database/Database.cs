@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+using api.Handlers;
 using api.Models;
 using MySqlConnector;
 
@@ -10,95 +6,163 @@ namespace api.Databases
 {
     public class Database
     {
+        // db connection string
         private readonly string? cs;
+
+        // Player handler & static list
+        private AdminHandler adminHandler = new AdminHandler();
+        private static List<Admin> AllAdmin = new List<Admin>();
+
+        // Customer handler & static list
+        private CustomerHandler customerHandler = new CustomerHandler();
+        private static List<Customer> AllCustomer = new List<Customer>();
+
+        // Order handler & static list
+        private OrderHandler orderHandler = new OrderHandler();
+        private static List<Order> AllOrder = new List<Order>();
+
+        // Payment handler & static list
+        private PaymentHandler paymentHandler = new PaymentHandler();
+        private static List<Payment> AllPayment = new List<Payment>();
+
 
         public Database()
         {
-            cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
+            /* 
+                we will use the db made by jeb after we have all tested our code on localhost.
+                cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
+            */
+            cs = "Server=127.0.0.1;User ID=root;Password=Gasmask2910!;Database=titletowncatering";
         }
 
+        /*
+            ADMIN TASKS
+
+                Written by Bryce Callahan 11/15/2024
+        */
+        // Get all admins
         public async Task<List<Admin>> GetAllAdmins()
         {
-
-            List<Admin> myAdmins = [];
-
-            using var connection = new MySqlConnection(cs);
-            await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM wpwwyo4a82kv2jrd.admins;", connection);
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            if(cs != null)
             {
-                myAdmins.Add(new Admin
-                {
-                    // All of the various things to get pulled
-                    Id = 1,
-                    Email = "Cool@123",
-                    Password = "Username"
-                });
+                // set list from admin handler
+                AllAdmin = await adminHandler.GetAllAdmins(cs);
             }
 
-            return myAdmins;
+            // return admin list
+            return AllAdmin;
         }
 
+        // Add Admin
+        public async void AddNewAdmin(Admin admin)
+        {
+            if(cs != null)
+            {
+                // set list from admin handler
+                await adminHandler.AddNewAdmin(cs, admin);
+                await GetAllAdmins();
+            }
+        }
+
+        // Delete Admin
+        public async void DeleteAdmin(int adminID)
+        {
+            // set list from admin handler
+            if(cs != null)
+            {
+                await adminHandler.DeleteAdmin(cs, adminID);
+                await GetAllAdmins();
+            }
+        }
+
+        /*
+            CUSTOMER TASKS
+
+                Written by Bryce Callahan 11/15/2024
+        */
+        // Get all customers
         public async Task<List<Customer>> GetAllCustomers()
         {
-
-            List<Customer> myCustomers = [];
-
-            using var connection = new MySqlConnection(cs);
-            await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM wpwwyo4a82kv2jrd.customers;", connection);
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            if(cs != null)
             {
-                myCustomers.Add(new Customer
-                {
-                    // All of the various things to get pulled
-                    Id = 1,
-                    Name = "Trump",
-                    Email = "customer@gmail.com"
-                });
+                // set list from customer handler
+                AllCustomer = await customerHandler.GetAllCustomers(cs);
             }
 
-            return myCustomers;
+            // return customer list
+            return AllCustomer;
         }
-//updated Connor G 11/18/24
-       public async Task<List<Order>> GetAllOrders()
-        {
 
-            string sql = "SELECT * FROM orders WHERE Cancelled = 0;";
-            List<MySqlParameter> parms = new();
-            return await SelectOrders(sql, null);
+        // Add Customer
+        public async void AddNewCustomer(Customer customer)
+        {
+            if(cs != null)
+            {
+                // set list from admin handler
+                await customerHandler.AddNewCustomer(cs, customer);
+                await GetAllCustomers();
+            }
         }
+
+        // Delete Customer
+        public async void DeleteCustomer(int customerID)
+        {
+            if(cs != null)
+            {
+                // set list from admin handler
+                await customerHandler.DeleteCustomer(cs, customerID);
+                await GetAllCustomers();
+            }
+        }
+
+
+        /*
+            ORDER TASKS
+
+                Written by Connor G 11/18/2024
+                updated by BC 11/19/2024
+        */
+        // Get all customers
+        public async Task<List<Order>> GetAllOrders()
+        {
+            if(cs != null)
+            {
+                // set list from order handler
+                AllOrder = await orderHandler.GetAllOrders(cs);
+            }
+            
+            // return data
+            return AllOrder;
+        }
+        // Add Order
+        public async void AddNewOrder(Order Order)
+        {
+            if(cs != null)
+            {
+                // set list from admin handler
+                await orderHandler.AddNewOrder(cs, Order);
+                await GetAllOrders();
+            }
+        }
+
+
+        /*
+            Payment TASKS
+
+                Written by Hayden Walls 11/18/2024
+                updated by BC 11/21/2024
+        */
+        // Get all customers
         public async Task<List<Payment>> GetAllPayments()
         {
-
-            List<Payment> myPayments = [];
-
-            using var connection = new MySqlConnection(cs);
-            await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM wpwwyo4a82kv2jrd.payments;", connection);
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            if(cs != null)
             {
-                myPayments.Add(new Payment
-                {
-                    // All of the various things to get pulled
-                    Id = 1,
-                    OrderId = 1,
-                    CustomerId = 1,
-                    PaymentDate = "now",
-                    PaymentAmount = 4,
-                    PaymentMethod = "balling harder than yesterday",
-                    PaymentSuccessful = true
-
-                });
+                // set list from payment handler
+                AllPayment = await paymentHandler.GetAllPayments(cs);
             }
-
-            return myPayments;
+            
+            // return data
+            return AllPayment;
         }
 
 
@@ -125,12 +189,12 @@ namespace api.Databases
                     Date = reader.GetString(1),
                     Time = reader.GetString(2),
                     Package = reader.GetInt32(3),
-                    PackageHours = reader.GetInt32(4),
+                    Duration = reader.GetInt32(4),
                     Cancelled = reader.GetBoolean(5),
                     ServiceDate = reader.GetString(6),
                     ServiceTime = reader.GetString(7),
-                    OrderedBy = reader.GetString(8),
-                    ServicedBy = reader.GetString(9)
+                    OrderedBy = reader.GetInt32(8),
+                    ServicedBy = reader.GetInt32(9)
                 });
             }
 
@@ -171,7 +235,7 @@ namespace api.Databases
             parms.Add(new MySqlParameter(@"Date", MySqlDbType.String) { Value = myOrder.Date });
             parms.Add(new MySqlParameter(@"Time", MySqlDbType.String) { Value = myOrder.Time });
             parms.Add(new MySqlParameter(@"Package", MySqlDbType.Int32) { Value = myOrder.Package });
-            parms.Add(new MySqlParameter(@"PackageHours", MySqlDbType.Int32) { Value = myOrder.PackageHours });
+            parms.Add(new MySqlParameter(@"PackageHours", MySqlDbType.Int32) { Value = myOrder.Duration });
             parms.Add(new MySqlParameter(@"Cancelled", MySqlDbType.Bit) { Value = myOrder.Cancelled });
             parms.Add(new MySqlParameter(@"ServiceDate", MySqlDbType.String) { Value = myOrder.ServiceDate });
             parms.Add(new MySqlParameter(@"ServiceTime", MySqlDbType.String) { Value = myOrder.ServiceTime });

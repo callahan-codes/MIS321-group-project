@@ -1,3 +1,5 @@
+/* Created by bryce callahan - updated by BC 11/15/2024 */
+
 /* CONFIGURATION */
 /* imports */
 @import url('https://fonts.cdnfonts.com/css/montserrat'); /* font */
@@ -37,6 +39,7 @@ h3, h4,
 h5, h6
 {
     font-weight: bold;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -85,6 +88,11 @@ h6
 .text-color-crimson
 {
     color: var(--red);
+}
+
+.text-color-white
+{
+    color: var(--white);
 }
 
 
@@ -140,11 +148,34 @@ header h5
     /* dimensions */
     width: 100%;
     height: 100%;
+    overflow-y: scroll;
 
     /* bg color and z-index */
     background-color: var(--dark-grey);
     color: var(--white);
     z-index: 100;
+}
+
+/* app scrollbar */
+/* width */
+#app-screen::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+#app-screen::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* Handle */
+#app-screen::-webkit-scrollbar-thumb {
+    background: var(--red); 
+}
+
+/* Handle on hover */
+#app-screen::-webkit-scrollbar-thumb:hover {
+    background: var(--light-grey); 
+    cursor: grab;
 }
 
 #app-close-btn 
@@ -241,6 +272,30 @@ main
 {
     /* border color */
     border-color: var(--dark-grey);
+}
+
+.tool-nav-flexbox 
+{
+    margin: 10px 0;
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tool-nav-flexbox div 
+{
+    background-color: var(--red);
+    box-sizing: border-box;
+    padding: 8px;
+    margin: 10px;
+    width: auto;
+    min-width: 200px;
+    text-align: center;
+    cursor: pointer;
 }
 
 /* info box */
@@ -401,6 +456,55 @@ input[type="password"]:focus
     grid-column: 1 / 3;
 }
 
+/* table */
+table 
+{
+    background-color: var(--light-grey);
+    padding: 8px;
+    box-sizing: border-box;
+    border-spacing: 0 1em;
+    border-radius: 5px;
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+}
+
+table tr th
+{
+    color: var(--dark-grey);
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+
+table tr td
+{
+    color: var(--dark-grey);
+    padding-top: 15px;
+}
+
+.admin-option-box
+{
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100px;
+
+    background-color: var(--light-grey);
+    color: var(--dark-grey);
+    border: 3px solid var(--light-grey);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.admin-option-box:hover
+{
+    border-color: var(--red);
+    cursor: pointer;
+}
+
 /* links */
 a {
     color: var(--red);
@@ -495,15 +599,6 @@ a {
         font-size: 20px;
     }
 
-    h5
-    {
-        font-size: 10px;
-    }
-
-    h6
-    {
-        font-size: 8px;
-    }
 
     .col-2,
     .col-3,
@@ -512,6 +607,11 @@ a {
     .col-long-right
     {
         grid-template-columns: repeat(1,1fr);
+    }
+
+    .col-span-all 
+    {
+        grid-column: 1 / 2;
     }
 
     .hide-when-small 
