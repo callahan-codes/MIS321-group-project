@@ -21,7 +21,10 @@ namespace api.Databases
         private OrderHandler orderHandler = new OrderHandler();
         private static List<Order> AllOrder = new List<Order>();
 
-        // put ur handler and static list below this. COMMENT YOUR CODE. EVERYTHING.
+        // Payment handler & static list
+        private PaymentHandler paymentHandler = new PaymentHandler();
+        private static List<Payment> AllPayment = new List<Payment>();
+
 
         public Database()
         {
@@ -140,6 +143,26 @@ namespace api.Databases
                 await orderHandler.AddNewOrder(cs, Order);
                 await GetAllOrders();
             }
+        }
+
+
+        /*
+            Payment TASKS
+
+                Written by Hayden Walls 11/18/2024
+                updated by BC 11/21/2024
+        */
+        // Get all customers
+        public async Task<List<Payment>> GetAllPayments()
+        {
+            if(cs != null)
+            {
+                // set list from payment handler
+                AllPayment = await paymentHandler.GetAllPayments(cs);
+            }
+            
+            // return data
+            return AllPayment;
         }
     }
 }

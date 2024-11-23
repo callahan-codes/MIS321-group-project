@@ -5,6 +5,7 @@ let url = 'http://localhost:5049/api/'
 let adminList = []
 let customerList = []
 let orderList = []
+let paymentList = []
 
 // Handle Document OnLoad
 async function handleOnLoad()
@@ -15,6 +16,8 @@ async function handleOnLoad()
     await getAllCustomers()
     // get all orders
     await getAllOrders();
+    // get all payments
+    await getAllPayments();
 
     // loader
     loaderDisplay()
@@ -171,6 +174,55 @@ async function getAllOrders()
     orderList.forEach(element => {
         console.log(element)
     });
+}
+
+// Get all payments api call
+/*
+    this function gets the payment api URL,
+    fetches for a response, and assigns the
+    response data to the main orderList array.
+
+    Written by Bryce Callahan 11/21/2024
+*/
+async function getAllPayments()
+{
+    // get admin url
+    const orderURL = url + 'payment';
+
+    // log
+    console.log(`Fetching Order API from ${orderURL}...`)
+
+    // try 
+    try
+    {
+        // if url isn't null
+        if(url != null)
+        {
+            // fetch url
+            let response = await fetch(orderURL)
+
+            // error handle | https://dev.to/dionarodrigues/fetch-api-do-you-really-know-how-to-handle-errors-2gj0
+            if(response.ok)
+            {
+                // assign recipe list to json
+                let data = await response.json()
+                paymentList = data
+
+                // log
+                console.log('API fetched: ' + paymentList.length + ' orders pulled from the database.')
+
+            } else 
+            {
+                // log
+                console.log("API FETCH ERROR: " + response.status)
+            }
+        }
+
+    } catch (error) // catch error
+    {
+        // log error
+        alert("Promise failed\n\n" + error + "\n\nPlease try again by reloading the page or checking your server.")
+    }
 }
 
 // Admin Creation
@@ -601,87 +653,89 @@ function adminLoginCheck()
     Written by Connor Gilstrap 11/7/2024
         updated by Bryce Callahan 11/10/2024
         updated by Bryce Callahan 11/15/2024
+        updated by Bryce Callahan 11/22/2024
 */
 function buildCustomerOrderForm() {
     // get app DOM
     const app = document.getElementById('app')
 
     // HTML content for customer order form
-    let html = `<div class="container">
-                    <h4>Schedule Service</h4>
-                    <form id="customerOrderForm" onsubmit="return false;" method="post">
-                        <div id="alert"></div>
-                        <div class="grid col-2">
+    let html = `
+        <div class="container">
+            <h4>Schedule Service</h4>
+            <form id="customerOrderForm" onsubmit="return false;" method="post">
+                <div id="alert"></div>
 
-                            <div>
-                                <h5>Personal Details</h5>
-                                <div class="grid col-2">
-                                    <div>
-                                        <label for="customerFName">First Name</label><br>
-                                        <input type="text" id="customerFName" name="customerFName" placeholder="John" required>
-                                    </div>
-                                    <div>
-                                        <label for="customerLName">Last Name</label><br>
-                                        <input type="text" id="customerLName" name="customerLName" placeholder="Doe" required>
-                                    </div>
-                                    <div class="col-span-all">
-                                        <label for="customerEmail">Your Email</label><br>
-                                        <input type="email" id="customerEmail" name="customerEmail" placeholder="example@gmail.com" required>
-                                    </div>
-                                </div>
-                            </div>
+                <h5>Personal Details</h5>
+                <div class="grid col-3">
+                    <div>
+                        <label for="customerFName">First Name</label><br>
+                        <input type="text" id="customerFName" name="customerFName" placeholder="John" required>
+                    </div>
+                    <div>
+                        <label for="customerLName">Last Name</label><br>
+                        <input type="text" id="customerLName" name="customerLName" placeholder="Doe" required>
+                    </div>
+                    <div>
+                        <label for="customerEmail">Your Email</label><br>
+                        <input type="email" id="customerEmail" name="customerEmail" placeholder="example@gmail.com" required>
+                    </div>
+                </div>
 
-                            <div>
-                                <h5>Event Details</h5>
-                                <div class="grid col-2">
-                                    <div>
-                                        <label for="serviceDate">Event Date</label><br>
-                                        <input type="date" id="serviceDate" name="serviceDate" required>
-                                    </div>
-                                    <div>
-                                        <label for="serviceAddress">Event Address</label><br>
-                                        <input type="text" id="serviceAddress" name="serviceAddress" placeholder="Address of event" required>
-                                    </div>
-                                    <div>
-                                        <label for="serviceTime">Event Start Time</label><br>
-                                        <select id="serviceTime" name="serviceTime" value="">
-                                            <option value="10:00 AM">10:00 AM</option>
-                                            <option value="11:00 AM">11:00 AM</option>
-                                            <option value="12:00 PM">12:00 PM</option>
-                                            <option value="1:00 PM">1:00 PM</option>
-                                            <option value="2:00 PM">2:00 PM</option>
-                                            <option value="3:00 PM">3:00 PM</option>
-                                            <option value="4:00 PM">4:00 PM</option>
-                                            <option value="5:00 PM">5:00 PM</option>
-                                            <option value="6:00 PM">6:00 PM</option>
-                                            <option value="7:00 PM">7:00 PM</option>
-                                            <option value="8:00 PM">8:00 PM</option>
-                                            <option value="9:00 PM">9:00 PM</option>
-                                            <option value="10:00 PM">10:00 PM</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="serviceDuration">Number of Hours</label><br>
-                                        <select id="serviceDuration" name="serviceDuration">
-                                            <option value="1">1 hour</option>
-                                            <option value="2">2 hours</option>
-                                            <option value="3">3 hours</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-span-all">
-                                        <label for="package">Select Package</label><br>
-                                        <select id="package" name="package">
-                                            <option value="1">Package 1</option>
-                                            <option value="2">Package 2</option>
-                                            <option value="3">Package 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" onclick="createNewOrder()">Submit Order</button>
-                    </form>
-                </div>`
+                <hr/>
+                <h5>Event Details</h5>
+                <div class="grid col-2">
+                    <div>
+                        <label for="serviceDate">Event Date</label><br>
+                        <input type="date" id="serviceDate" name="serviceDate" required>
+                    </div>
+                    <div>
+                        <label for="serviceAddress">Event Address</label><br>
+                        <input type="text" id="serviceAddress" name="serviceAddress" placeholder="Address of event" required>
+                    </div>
+                    <div>
+                        <label for="serviceTime">Event Start Time</label><br>
+                        <select id="serviceTime" name="serviceTime" value="">
+                            <option value="10:00 AM">10:00 AM</option>
+                            <option value="11:00 AM">11:00 AM</option>
+                            <option value="12:00 PM">12:00 PM</option>
+                            <option value="1:00 PM">1:00 PM</option>
+                            <option value="2:00 PM">2:00 PM</option>
+                            <option value="3:00 PM">3:00 PM</option>
+                            <option value="4:00 PM">4:00 PM</option>
+                            <option value="5:00 PM">5:00 PM</option>
+                            <option value="6:00 PM">6:00 PM</option>
+                            <option value="7:00 PM">7:00 PM</option>
+                            <option value="8:00 PM">8:00 PM</option>
+                            <option value="9:00 PM">9:00 PM</option>
+                            <option value="10:00 PM">10:00 PM</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="serviceDuration">Number of Hours</label><br>
+                        <select id="serviceDuration" name="serviceDuration">
+                            <option value="1">1 hour</option>
+                            <option value="2">2 hours</option>
+                            <option value="3">3 hours</option>
+                        </select>
+                    </div>
+                    <div class="col-span-all">
+                        <label for="package">Select Package</label><br>
+                        <select id="package" name="package">
+                            <option value="1">Package 1</option>
+                            <option value="2">Package 2</option>
+                            <option value="3">Package 3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr/>
+                <h5>Payment Details</h5><!-- payment form will go here -->
+
+                <button type="submit" onclick="createNewOrder()">Submit Order</button>
+            </form>
+        </div>
+    `
 
     app.innerHTML = html
 }
@@ -716,11 +770,12 @@ function buildAdminDashboard(admin)
                 <div class="admin-option-box">
                     <p>Customer Tools</p>
                 </div>
-                <div class="admin-option-box" onclick="buildAllReports()">
+                <div class="admin-option-box" onclick="buildReportNav()">
                     <p>Reports</p>
                 </div>
             </div>
 
+            <div id="toolbox-nav"></div>
             <div id="toolbox"></div>
         `
 
@@ -872,18 +927,117 @@ function buildCustomerDataTable()
 
     Written by Bryce Callahan 11/19/2024
 */
-function buildAllReports()
+function buildReportNav()
 {
     // get app DOM
-    const app = document.getElementById('toolbox')
+    const app = document.getElementById('toolbox-nav')
 
-    let html = ``
+    let html = `
+        <div class="tool-nav-flexbox">
+            <div onclick="buildDailyOrderReport()">Daily Orders</div>
+            <div>Weekly Orders</div>
+            <div>Monthly Orders</div>
+            <div>All Orders</div>
+            <div>All Customers</div>
+            <div>Unpaid Orders</div>
+        </div>
+    `
 
-    html += buildAdminDataTable()
-    html += buildCustomerDataTable()
-    html += buildOrderDataTable()
+    // html += buildAdminDataTable()
+    // html += buildCustomerDataTable()
+    // html += buildOrderDataTable()
 
     // send to inner html
+    app.innerHTML = html
+}
+
+// Show daily orders
+/*
+    this functions shows all orders that 
+    were placed today.
+
+    written by BC 11/22/2024
+*/
+function buildDailyOrderReport()
+{
+
+    let app = document.getElementById('toolbox')
+
+    // add info to table
+    let html = `<h5>Today's Orders</h5>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Ordered</th>
+            <th>Event Date</th>
+            <th>Event Time</th>
+            <th>Event Duration</th>
+        </tr> 
+    `
+
+    orderList.forEach(order => {
+        if(order.date == GetDate())
+        {
+            html += `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.date} ${order.time}</td>
+                    <td>${order.serviceDate}</td>
+                    <td>${order.serviceTime}</td>
+                    <td>${order.duration} hours</td>
+                </tr>
+            `
+        }
+    })
+
+    // close table
+    html += `</table>`
+
+    app.innerHTML = html
+}
+
+// Show daily orders
+/*
+    this functions shows all orders that 
+    were placed today.
+
+    written by BC 11/22/2024
+*/
+function buildWeeklyOrderReport()
+{
+
+    let app = document.getElementById('toolbox')
+
+    // add info to table
+    let html = `<h5>Today's Orders</h5>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Ordered</th>
+            <th>Event Date</th>
+            <th>Event Time</th>
+            <th>Event Duration</th>
+        </tr> 
+    `
+
+    orderList.forEach(order => {
+        if(order.date == GetDate())
+        {
+            html += `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.date} ${order.time}</td>
+                    <td>${order.serviceDate}</td>
+                    <td>${order.serviceTime}</td>
+                    <td>${order.duration} hours</td>
+                </tr>
+            `
+        }
+    })
+
+    // close table
+    html += `</table>`
+
     app.innerHTML = html
 }
 
@@ -897,7 +1051,7 @@ function buildAllReports()
 function buildAdminTools()
 {
     // get app DOM
-    const app = document.getElementById('toolbox')
+    const app = document.getElementById('toolbox-nav')
 
     let html = ``
 
@@ -905,18 +1059,6 @@ function buildAdminTools()
 
     // send to inner html
     app.innerHTML = html
-}
-
-// Build Admin Editing tools
-/*
-    this allows admins to change other admin 
-    data in the db.
-
-    Written by Bryce Callahan 11/19/2024
-*/
-function buildAdminEditingTool()
-{
-    
 }
 
 // Clear Form Fields Function | Admin & Customer Order
@@ -953,4 +1095,19 @@ function clearAllFormFields(formToClear)
             document.getElementById('alert').style.display = 'none'
             break
     }
+}
+
+function GetDate()
+{
+    // get today's date | https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    // format date
+    today = yyyy + '-' + mm + '-' + dd;
+    let date = today.toString()
+
+    return date
 }

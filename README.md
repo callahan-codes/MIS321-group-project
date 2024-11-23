@@ -83,6 +83,13 @@
   <li>Built an admin dashboard navigation and report functions.</li>
 </ul>
 
+<h2>11/21/2024 | BC</h2>
+<ul>
+  <li>Merged Bryce and Haydens code.</li>
+  <li>Updated Database sql script to a bool value for paymentstatus.</li>
+  <li>Updated some payment handler logic and built the payment api in indexjs.</li>
+</ul>
+
 <hr/>
 <hr/>
 <hr/>
