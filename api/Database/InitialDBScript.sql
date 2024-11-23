@@ -24,10 +24,10 @@ CREATE TABLE PAYMENT
   PaymentId INT NOT NULL,
   OrderId INT NOT NULL,
   CustId INT NOT NULL,
-  PaymentDate DATE NOT NULL,
+  PaymentDate VARCHAR(24) NOT NULL,
   PaymentAmount FLOAT NOT NULL,
   PaymentMethod VARCHAR(24) NOT NULL,
-  PaymentStatus VARCHAR(12) NOT NULL,
+  PaymentStatus BIT NOT NULL,
   PRIMARY KEY (PaymentId)
 );
 

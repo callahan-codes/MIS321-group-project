@@ -7,7 +7,7 @@ namespace api.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-         // database instance
+        // database instance
         private Database database = new Database();
 
         // GET
