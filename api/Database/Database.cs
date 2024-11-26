@@ -104,6 +104,17 @@ namespace api.Databases
             }
         }
 
+        // Update order ServicedBy
+        public async void UpdateCustomerInfo(Customer customer)
+        {
+            if(cs != null)
+            {
+                await customerHandler.UpdateCustomerInfo(cs, customer);
+                await GetAllCustomers();
+            }
+        }
+
+
         // Delete Customer
         public async void DeleteCustomer(int customerID)
         {

@@ -421,7 +421,7 @@ async function createNewOrder()
             package: parseInt(packageType),
             orderedBy: newCustomer.id,      
             servicedBy: 1,
-            paymentId: 1 // will replace this after we get payment
+            serviceCompleted: false
         }
 
         // add to main customer list
@@ -816,7 +816,7 @@ function buildOrderDataTable()
                     <th>Package Type</th>
                     <th>Ordered By</th>
                     <th>Serviced By</th>
-                    <th>Payment ID</th>
+                    <th>Service Completed</th>
                 </tr> 
         `
         // indivudal order info insertion
@@ -834,7 +834,7 @@ function buildOrderDataTable()
                     <td>${order.package}</td>
                     <td>${order.orderedBy}</td>
                     <td>${order.servicedBy}</td>
-                    <td>${order.paymentId}</td>
+                    <td>${order.serviceCompleted}</td>
                 </tr>
             `
         });
@@ -863,11 +863,13 @@ function buildAdminDataTable()
     removeToolboxForm()
     const app = document.getElementById('toolbox')
     // add order info to table
-    let html = `<h5>Admins</h5>
+    let html = `<h5>All Admins</h5>
     <table>
         <tr>
             <th>ID</th>
             <th>Email</th>
+            <th>Password</th>
+            <th>Edit</th>
         </tr> 
     `
     // indivudal order info insertion
@@ -876,6 +878,8 @@ function buildAdminDataTable()
         <tr>
             <td>${admin.id}</td>
             <td>${admin.email}</td>
+            <td>${admin.password}</td>
+            <td><a href="#edit-admin" onclick="editAdminDataForm(${admin.id})">Edit</a></td>
         </tr>
     `
     });
@@ -895,6 +899,7 @@ function buildAdminDataTable()
 */
 function buildCustomerDataTable()
 {
+    removeToolboxForm()
     // get app DOM
     const app = document.getElementById('toolbox')
 
@@ -939,6 +944,7 @@ function buildCustomerToolsNav()
     let html = `
         <div class="tool-nav-flexbox">
             <div onclick="buildCustomerDataTable()">All Customers</div>
+            <div onclick="buildCustomerEditTool()">Edit Customer data</div>
         </div>
     `
 
@@ -985,7 +991,7 @@ function buildAdminToolsNav(adminID)
 
     let html = `
         <div class="tool-nav-flexbox">
-            <div onclick="buildAdminDataTable()">All Employees</div>
+            <div onclick="buildAdminDataTable()">Edit Employee Data</div>
             <div onclick="buildEmployeeTaskAssignment()">Employee Task Assignment</div>
             <div onclick="buildEmployeeEvents('${adminID}')">My Events</div>
         </div>
@@ -1020,6 +1026,13 @@ function buildEmployeeEvents(adminID)
                 <div class="card">
                     <h3 class="title">Order #${order.id}</h5>
                     <h5 class="subtitle">Service Date: ${order.serviceDate} @ ${order.serviceTime}</h5>
+                    <hr/>
+                    <h5 class="subtext">Address: ${order.serviceAddress}</h5>
+                    <h5 class="subtext">Package: ${order.package}</h5>
+                    <hr/>
+                    <h5 class="subtext" style="color:var(--red)">Completed: ${order.serviceCompleted}</h5>
+                    <input type="checkbox" id="completed" name="completed">
+                    <label id="completed-label" for="completed" style="color:var(--dark-grey)">Mark as complete</label><br>
                 </div>
             `
         }
@@ -1212,11 +1225,11 @@ function buildEmployeeTaskAssignment()
     app.innerHTML = html
 }
 
-// Edit order assignment to employee form
+// Edit order assignment employee form
 /*
-    this method allows an admin to 
-    assign another admin to a customers
-    order event via a form.
+    this method displays the dom that
+    allows an admin to assign another 
+    admin to a customers order event via a form.
 
     written by Bryce Callahan 11/25/2024
 */
@@ -1243,6 +1256,49 @@ function editOrderAssignment(orderID, adminID)
                     <button type="submit" onclick="updateAdminTask(orderID.value, empID.value)">Submit</button>
                 </form>
     `
+
+    app.innerHTML = html
+}
+
+// Edit admin data
+/*
+    this method edits the admin
+    data and saves to the db.
+
+    written by Bryce Callahan 11/26/2024
+*/
+function editAdminDataForm(adminID)
+{
+    // init app
+    let app = document.getElementById('toolbox-form')
+
+    // init html
+    let html = ``
+
+    adminList.forEach(admin => {
+        if(admin.id == adminID)
+        {
+            html = `
+            <h5>Edit Admin</h5>
+            <form onsubmit="return false;" method="post">
+                <div id="alert"></div>
+                <div class="grid col-2">
+                    <div> <!-- email -->
+                        <label for="adminEmail">Email</label><br>
+                        <input type="email" id="adminEmail" name="adminEmail" value="${admin.email}" autocomplete="off">
+                    </div>
+    
+                    <div> <!-- password -->
+                        <label for="adminPassword">Password</label><br>
+                        <input type="text" id="adminPassword" name="adminPassword" value="${admin.password}" autocomplete="off">
+                    </div>
+                </div>
+                <button type="submit" onclick="createNewAdmin()">Submit</button>
+            </form>
+        `
+        }
+    });
+    
 
     app.innerHTML = html
 }
@@ -1403,4 +1459,152 @@ function GetDate()
     let date = today.toString()
 
     return date
+}
+
+// BELOW WAS WRITTEN BY HAYDEN WALLS
+// Build the Customer Tools section
+function buildCustomerEditTool() {
+    removeToolboxForm()
+    // Get app DOM
+    const app = document.getElementById('toolbox');
+
+    // Generate customer editing tools (table + form)
+    let html = `
+        <div>
+            ${createCustomerEditTable()}
+        </div>
+    `;
+
+    // Send to inner HTML
+    app.innerHTML = html;
+}
+
+// Create the customer table
+function createCustomerEditTable() {
+    let html = `<h5>Customers</h5>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Edit</th>
+        </tr>`;
+
+    // Should loop through the customers and add table data for all the rows.
+    customerList.forEach(customer => {
+        html += `
+        <tr>
+            <td>${customer.id}</td>
+            <td>${customer.fName} ${customer.lName}</td>
+            <td>${customer.email}</td>
+            <td>
+                <a href="#customer-edit" onclick="populateCustomerForm(${customer.id})">Edit</a>
+            </td>
+        </tr>`;
+    });
+
+    html += `</table>`;
+    return html;
+}
+
+// Create the customer editing form
+function createCustomerEditForm() {
+
+    const app = document.getElementById('toolbox-form')
+
+    let html = `
+    <h5 id="customer-edit">Edit Customer</h5>
+    <form onsubmit="return false;" method="post" id="editCustomerForm">
+        <div id="alert"></div>
+        <div class="grid col-2">
+            <div>
+                <label for="editID">ID:</label>
+                <input type="text" id="editID" name="id" disabled >
+            </div>
+            <div>
+                <label for="editFName">First Name:</label>
+                <input type="text" id="editFName" name="fname">
+            </div>
+            <div>
+                <label for="editLName">Last Name:</label>
+                <input type="text" id="editLName" name="lname">
+            </div>
+            <div>
+                <label for="editEmail">Email:</label>
+                <input type="email" id="editEmail" name="email">
+            </div>
+        </div>
+        <button type="submit" onclick="submitCustomerEdit()">Submit</button>
+    </form>`;
+    
+    app.innerHTML = html
+}
+
+// Populate the form with customer data when editing
+function populateCustomerForm(customerId) {
+
+    createCustomerEditForm()
+
+    const customer = customerList.find(c => c.id === customerId);
+    
+    if (customer) {
+        document.getElementById('editFName').value = customer.fName;
+        document.getElementById('editLName').value = customer.lName;
+        document.getElementById('editEmail').value = customer.email;
+        document.getElementById('editID').value = customer.id;
+    }
+}
+
+// Submit the edited customer form
+async function submitCustomerEdit() {
+    const id = parseInt(document.getElementById('editID').value, 10);
+    const updatedFName = document.getElementById('editFName').value;
+    const updatedLName = document.getElementById('editLName').value;
+    const updatedEmail = document.getElementById('editEmail').value;
+
+    const customerIndex = customerList.findIndex(c => c.id === id);
+    const alert = document.getElementById('alert')
+    alert.style.display = 'none'
+    if (customerIndex !== -1) {
+        customerList[customerIndex].fName = updatedFName;
+        customerList[customerIndex].lName = updatedLName;
+        customerList[customerIndex].email = updatedEmail;
+        try 
+        {
+            const customerURL = url + `customer/${id}`
+            // put | update in db
+            await fetch(customerURL, {
+                method: "PUT",
+                body: JSON.stringify(customerList[customerIndex]),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+
+            
+        } catch (error) 
+        {
+            // log
+            console.log(error)
+        }
+
+        // show alert
+        alert.style.display = 'block'
+        alert.style.backgroundColor = 'var(--alert-pass)'
+        alert.innerHTML = `The Customer (ID: ${customerList[customerIndex]}) has succesfully been edited.` 
+
+        // Rebuild the customer table
+        document.getElementById('toolbox').innerHTML = `
+            ${createCustomerEditTable()}
+            <div id="editFormSection">
+                ${createCustomerEditForm()}
+            </div>
+        `;
+        console.log(customerList[customerIndex])
+    } else {
+        // show alert
+        alert.style.display = 'block'
+        alert.style.backgroundColor = 'var(--red)'
+        alert.innerHTML = `The Customer (ID: ${customerList[customerIndex]}) was not found.` 
+    }
 }

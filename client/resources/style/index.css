@@ -359,6 +359,12 @@ main
     color: var(--dark-grey);
 }
 
+.card .subtext
+{
+    font-size: 18px;
+    color: var(--dark-grey);
+}
+
 .card .message
 {
     font-size: 20px;

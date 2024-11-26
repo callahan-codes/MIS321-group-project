@@ -8,6 +8,7 @@ namespace api.Controllers
 {
     /*
         Written by Bryce Callahan 11/15/2024
+            updated by BC 11/26/2024
 
         this is the admin controller that
         calls the respective admin handler 
@@ -36,6 +37,14 @@ namespace api.Controllers
         {
             // add new admin
             database.AddNewCustomer(myCustomer);
+        }
+
+        // PUT
+        [HttpPut("{customer}")]
+        public void Put(Customer customer)
+        {
+            // update customer
+            database.UpdateCustomerInfo(customer);
         }
 
         // DELETE
