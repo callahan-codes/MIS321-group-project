@@ -2,7 +2,6 @@ using api.Models;
 using api.Databases;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace api.Controllers
 {
     /*
@@ -43,6 +42,14 @@ namespace api.Controllers
         {
             // "delete" admin
             database.DeleteAdmin(id);
+        }
+
+        // PUT - Update admin information
+       [HttpPut("{id}")]
+        public void Update(int id, [FromBody] Admin updatedAdmin)
+        {
+            // update admin
+            database.UpdateAdmin(id, updatedAdmin);
         }
     }
 }

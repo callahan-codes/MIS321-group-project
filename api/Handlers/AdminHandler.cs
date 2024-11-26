@@ -4,8 +4,10 @@ namespace api.Handlers
 {
     /*
         Written by Bryce Callahan 11/15/2024
+        Updated by Connor T. Gilstrap 11/23/2024
+         Updated by Connor T. Gilstrap 11/26/2024
 
-        this is the admin handler than gets/places all 
+        This is the admin handler that gets/places all 
         admin data from/to the TTC admin db table.
     */
     public class AdminHandler
@@ -14,7 +16,7 @@ namespace api.Handlers
         public async Task<List<Admin>> GetAllAdmins(string cs)
         {
             // init empty admin list
-            List<Admin> myAdmins = [];
+            List<Admin> myAdmins = new List<Admin>();
 
             // instantiate mysqlconnection object
             using var connection = new MySqlConnection(cs);
@@ -34,7 +36,7 @@ namespace api.Handlers
                 string pass = reader.GetString(1);
                 string email = reader.GetString(2);
 
-                // add admine values to new admin list
+                // add admin values to new admin list
                 myAdmins.Add(new Admin(){ 
                     Id = id,
                     Password = pass,
@@ -74,7 +76,7 @@ namespace api.Handlers
             // command text
             command.CommandText = @$"INSERT INTO admin(AdminId, AdminPassword, AdminEmail) VALUES(@adminID, @adminPassword, @adminEmail);";
 
-            // command paramaters
+            // command parameters
             command.Parameters.AddWithValue("@adminID", adminID);
             command.Parameters.AddWithValue("@adminPassword", adminPassword);
             command.Parameters.AddWithValue("@adminEmail", adminEmail);
@@ -102,6 +104,37 @@ namespace api.Handlers
 
             // command text | soft delete
             command.CommandText = @$"DELETE FROM `titletowncatering`.`admin` WHERE (`AdminId` = '{adminID}');";
+
+            // prepare command
+            command.Prepare();
+
+            // execute command
+            command.ExecuteNonQuery();
+        }
+    
+        public async Task UpdateAdmin(string cs, int adminID, Admin updatedAdmin)
+        {
+            Console.WriteLine($"Updating Admin {adminID} {cs}");
+
+            // instantiate mysqlconnection object
+            using var connection = new MySqlConnection(cs);
+
+            // open connection
+            await connection.OpenAsync();
+
+            // create sql command for db
+            using var command = new MySqlCommand("", connection);
+
+            // command text to update admin details
+            command.CommandText = @$"UPDATE `titletowncatering`.`admin` 
+                                    SET `AdminPassword` = @adminPassword, 
+                                        `AdminEmail` = @adminEmail 
+                                    WHERE `AdminId` = @adminID;";
+
+            // assign parameters
+            command.Parameters.AddWithValue("@adminID", adminID);
+            command.Parameters.AddWithValue("@adminPassword", updatedAdmin.Password);
+            command.Parameters.AddWithValue("@adminEmail", updatedAdmin.Email);
 
             // prepare command
             command.Prepare();

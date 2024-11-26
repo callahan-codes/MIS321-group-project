@@ -5,8 +5,8 @@ use TitleTownCatering;
 CREATE TABLE ADMIN
 (
   AdminId INT NOT NULL,
-  AdminPassword VARCHAR(24) NOT NULL,
-  AdminEmail VARCHAR(24) NOT NULL,
+  AdminPassword VARCHAR(50) NOT NULL,
+  AdminEmail VARCHAR(50) NOT NULL,
   PRIMARY KEY (AdminId)
 );
 

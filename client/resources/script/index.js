@@ -859,30 +859,7 @@ function buildOrderDataTable()
 
     Written by Bryce Callahan 11/19/2024
 */
-function buildAdminDataTable()
-{
-    // add order info to table
-    let html = `<h5>Admins</h5>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Email</th>
-        </tr> 
-    `
-    // indivudal order info insertion
-    adminList.forEach(admin => {
-    html += `
-        <tr>
-            <td>${admin.id}</td>
-            <td>${admin.email}</td>
-        </tr>
-    `
-    });
-    // close table
-    html += `</table>`
-
-    return html
-}
+//edit button added by Connor Gilstrap 11/23/2024
 
 // Build Customer Table
 /*
@@ -1001,19 +978,137 @@ function buildDailyOrderReport()
 
     Written by Bryce Callahan 11/19/2024
 */
-function buildAdminTools()
-{
-    // get app DOM
-    const app = document.getElementById('toolbox-nav')
+//updated Connor 11/23/24
+function buildAdminTools() {
+    // Get the DOM element where the content will go
+    const app = document.getElementById('toolbox-nav');
 
-    let html = ``
+    // Create the form for editing admins (visible by default)
+    let html = `
+        <div id="edit-form-container" style="margin-bottom: 20px;">
+            <form id="edit-admin-form" onsubmit="return false;">
+                <label for="admin-email">Admin Email:</label><br>
+                <input type="text" id="admin-email" name="email"><br>
+                
+                <label for="admin-password">New Password:</label><br>
+                <input type="password" id="admin-password" name="password"><br><br>
+                
+                <button type="button" onclick="handleAdminEdit()">Submit</button>
+            </form>
+        </div>`;
 
-    html += buildAdminEditingTool()
+    // Append the Admin Data Table to the HTML
+    html += buildAdminDataTable();
 
-    // send to inner html
-    app.innerHTML = html
+    // Set the content to the app container
+    app.innerHTML = html;
 }
 
+// Function to build the admin data table
+function buildAdminDataTable() {
+    let html = `
+        <h5>Admins</h5>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+    `;
+
+    // Iterate over the admin data from the database
+    adminList.forEach(admin => {
+        html += `
+            <tr>
+                <td>${admin.id}</td>
+                <td>${admin.email}</td>
+                <td>
+                    <button onclick="showEditForm(${admin.id}, '${admin.email}', '${admin.password}')">Edit</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    // Close the table
+    html += `</table>`;
+    
+    return html;
+}
+
+// Function to display the edit form with the selected admin's data
+function showEditForm(adminId, adminEmail, adminPassword) {
+    // Fill the form with the current admin's information
+    document.getElementById('admin-email').value = adminEmail;
+    document.getElementById('admin-password').value = adminPassword;
+
+    // Store the current admin ID for editing
+    const editFormContainer = document.getElementById('edit-form-container');
+    editFormContainer.dataset.currentAdminId = adminId;
+}
+
+// Function to handle form submission for editing an admin
+async function handleAdminEdit() {
+    // Retrieve updated data from the form
+    const updatedEmail = document.getElementById('admin-email').value;
+    const updatedPassword = document.getElementById('admin-password').value;
+
+    // Get the admin ID stored in the form's container
+    const formContainer = document.getElementById('edit-form-container');
+    const adminId = formContainer.getAttribute('data-current-admin-id');
+
+    // New admin data
+    const updatedAdmin = {
+        email: updatedEmail,
+        password: updatedPassword
+    };
+
+    // Simulating backend update with a PUT request
+    console.log("Sending admin to PUT:", JSON.stringify(updatedAdmin));
+
+    try {
+        await fetch(`http://localhost:5049/api/admins/${adminId}`, { 
+            method: "PUT",
+            body: JSON.stringify(updatedAdmin),
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        });
+
+        // Fetch the updated list of admins to refresh the table (if necessary)
+        await fetchAdminList();
+
+        // Clear the form fields
+        clearAdminFormFields();
+
+        // Reload the admin table with updated data
+        document.getElementById('toolbox-nav').innerHTML = buildAdminDataTable();
+    } catch (error) {
+        console.error("Error updating admin:", error);
+    }
+}
+
+// Function to clear form fields after editing
+function clearAdminFormFields() {
+    document.getElementById('admin-email').value = '';
+    document.getElementById('admin-password').value = '';
+}
+
+// Function to fetch the admin list from the backend
+async function fetchAdminList() {
+    try {
+        const response = await fetch('http://localhost:5049/api/admin');
+        const data = await response.json();
+        adminList = data;
+    } catch (error) {
+        console.error("Error fetching admin list:", error);
+    }
+}
+
+// Ensure that the admin list is fetched before displaying the tools
+document.addEventListener('DOMContentLoaded', async () =>{
+    await fetchAdminList();
+    buildAdminTools();
+});
 // Clear Form Fields Function | Admin & Customer Order
 /*
     this function clears all form fields. Connor, put your

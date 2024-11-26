@@ -32,7 +32,7 @@ namespace api.Databases
                 we will use the db made by jeb after we have all tested our code on localhost.
                 cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
             */
-            cs = "Server=127.0.0.1;User ID=root;Password=Gasmask2910!;Database=titletowncatering";
+            cs = "Server=127.0.0.1;User ID=root;Password=Moneyman6$;Database=titletowncatering";
         }
 
         /*
@@ -74,7 +74,14 @@ namespace api.Databases
                 await GetAllAdmins();
             }
         }
-
+        public async void UpdateAdmin(int adminID, Admin updatedAdmin)
+        {
+            if (cs != null)
+            {
+                await adminHandler.UpdateAdmin(cs, adminID, updatedAdmin);
+                await GetAllAdmins();
+            }
+        }
         /*
             CUSTOMER TASKS
 
