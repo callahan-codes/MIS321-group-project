@@ -5,6 +5,7 @@ namespace api.Handlers
     public class OrderHandler
     {
         // created by Connor G 11/18/24
+        // updated by BC 11/23/2024
         public async Task<List<Order>> GetAllOrders(string cs)
         {
 
@@ -101,6 +102,32 @@ namespace api.Handlers
             // execute command
             command.ExecuteNonQuery();
         }
+
+        // connect to db | update data
+        public async Task UpdateOrderServiced(string cs, Order myOrder)
+        {
+            // log
+            Console.WriteLine($"Updating Order {myOrder.Id}");
+
+            // instantiate mysqlconnection object
+            using var connection = new MySqlConnection(cs);
+
+            // open connection
+            await connection.OpenAsync();
+            
+            // create sql command for db
+            using var command = new MySqlCommand("", connection);
+
+            // command text | soft delete
+            command.CommandText = @$"UPDATE titletowncatering.order SET ServicedBy = {myOrder.ServicedBy} WHERE OrderId = {myOrder.Id};";
+
+            // prepare command
+            command.Prepare();
+
+            // execute command
+            command.ExecuteNonQuery();
+        }
+    
         
 //    //Created by Connor G 11/18/24
 //          private async Task<List<Order>> SelectOrders(string sql, List<MySqlParameter> parms)

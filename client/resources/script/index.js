@@ -5,8 +5,7 @@ let url = 'http://localhost:5049/api/'
 let adminList = []
 let customerList = []
 let orderList = []
-let paymentList = []
-let servicedList = []
+// let paymentList = []  
 
 // Handle Document OnLoad
 async function handleOnLoad()
@@ -18,9 +17,7 @@ async function handleOnLoad()
     // get all orders
     await getAllOrders();
     // get all payments
-    await getAllPayments();
-    // get all serviced
-    await getAllServiced();
+    // await getAllPayments();
 
     // loader
     loaderDisplay()
@@ -173,10 +170,6 @@ async function getAllOrders()
         // log error
         alert("Promise failed\n\n" + error + "\n\nPlease try again by reloading the page or checking your server.")
     }
-
-    orderList.forEach(element => {
-        console.log(element)
-    });
 }
 
 // Get all payments api call
@@ -213,55 +206,6 @@ async function getAllPayments()
 
                 // log
                 console.log('API fetched: ' + paymentList.length + ' orders pulled from the database.')
-
-            } else 
-            {
-                // log
-                console.log("API FETCH ERROR: " + response.status)
-            }
-        }
-
-    } catch (error) // catch error
-    {
-        // log error
-        alert("Promise failed\n\n" + error + "\n\nPlease try again by reloading the page or checking your server.")
-    }
-}
-
-// Get all serviced api call
-/*
-    this function gets the service api URL,
-    fetches for a response, and assigns the
-    response data to the main orderList array.
-
-    Written by Bryce Callahan 11/23/2024
-*/
-async function getAllServiced()
-{
-    // get admin url
-    const servicedURL = url + 'serviced';
-
-    // log
-    console.log(`Fetching Serviced API from ${servicedURL}...`)
-
-    // try 
-    try
-    {
-        // if url isn't null
-        if(url != null)
-        {
-            // fetch url
-            let response = await fetch(servicedURL)
-
-            // error handle | https://dev.to/dionarodrigues/fetch-api-do-you-really-know-how-to-handle-errors-2gj0
-            if(response.ok)
-            {
-                // assign recipe list to json
-                let data = await response.json()
-                servicedList = data
-
-                // log
-                console.log('API fetched: ' + servicedList.length + ' orders pulled from the database.')
 
             } else 
             {
@@ -328,10 +272,6 @@ async function createNewAdmin()
     }
     else 
     {
-        // show alert
-        alert.style.display = 'block'
-        alert.style.backgroundColor = 'var(--alert-pass)'
-        alert.innerHTML = `The admin account for ${email} has been made.<br><br><div class="profile-btn">View Admin Dashboard</div>`
 
         // get admin url
         const adminURL = url + 'admin';
@@ -364,6 +304,11 @@ async function createNewAdmin()
             // log
             console.log(error)
         }
+
+        // show alert
+        alert.style.display = 'block'
+        alert.style.backgroundColor = 'var(--alert-pass)'
+        alert.innerHTML = `The admin account for ${newAdmin.email} has been made.<br><br><div class="profile-btn" onclick="buildAdminLoginForm()">Login</div>`
 
        // clear admin create form
        clearAllFormFields('admin-create-form')
@@ -781,9 +726,6 @@ function buildCustomerOrderForm() {
                     </div>
                 </div>
 
-                <hr/>
-                <h5>Payment Details</h5><!-- payment form will go here -->
-
                 <button type="submit" onclick="createNewOrder()">Submit Order</button>
             </form>
         </div>
@@ -802,6 +744,8 @@ function buildCustomerOrderForm() {
 
     Written by Bryce Callahan 11/15/2024
         updated by BC 11/19/2024
+        updated by BC 11/25/2024
+        updated by BC 11/26/2024
 */
 function buildAdminDashboard(admin)
 {
@@ -812,14 +756,14 @@ function buildAdminDashboard(admin)
     let html = `
         <div class="container">
             <h2 style="color: var(--red);">Admin Dashboard</h2>
-            <h4>${admin.email}</h4>
+            <h4>${admin.email} | ID: ${admin.id}</h4>
             <hr/><br/>
 
             <div class="grid col-3">
-                <div class="admin-option-box" onclick="buildAdminTools()">
+                <div class="admin-option-box" onclick="buildAdminToolsNav(${admin.id})">
                     <p>Admin Tools</p>
                 </div>
-                <div class="admin-option-box">
+                <div class="admin-option-box" onclick="buildCustomerToolsNav()">
                     <p>Customer Tools</p>
                 </div>
                 <div class="admin-option-box" onclick="buildReportNav()">
@@ -829,6 +773,7 @@ function buildAdminDashboard(admin)
 
             <div id="toolbox-nav"></div>
             <div id="toolbox"></div>
+            <div id="toolbox-form"></div>
         `
 
     html += '</div>'
@@ -847,6 +792,7 @@ function buildAdminDashboard(admin)
 */
 function buildOrderDataTable()
 {
+    removeToolboxForm()
     const app = document.getElementById('toolbox')
     let html = `<h5>Orders</h5>`
     // if orders don't exist
@@ -914,6 +860,8 @@ function buildOrderDataTable()
 */
 function buildAdminDataTable()
 {
+    removeToolboxForm()
+    const app = document.getElementById('toolbox')
     // add order info to table
     let html = `<h5>Admins</h5>
     <table>
@@ -934,7 +882,7 @@ function buildAdminDataTable()
     // close table
     html += `</table>`
 
-    return html
+    app.innerHTML = html
 }
 
 // Build Customer Table
@@ -962,17 +910,39 @@ function buildCustomerDataTable()
     // indivudal order info insertion
     customerList.forEach(customer => {
         console.log(customer)
-    html += `
-        <tr>
-            <td>${customer.id}</td>
-            <td>${customer.fName} ${customer.lName}</td>
-            <td>${customer.email}</td>
-        </tr>
-    `
+        html += `
+            <tr>
+                <td>${customer.id}</td>
+                <td>${customer.fName} ${customer.lName}</td>
+                <td>${customer.email}</td>
+            </tr>
+        `
     });
     // close table
     html += `</table>`
 
+    app.innerHTML = html
+}
+
+// Build Customer Tools Nav
+/*
+    this shows the customer-based tools
+    readily available to admin
+
+    Written by Bryce Callahan 11/26/2024
+*/
+function buildCustomerToolsNav()
+{
+    // get app DOM
+    const app = document.getElementById('toolbox-nav')
+
+    let html = `
+        <div class="tool-nav-flexbox">
+            <div onclick="buildCustomerDataTable()">All Customers</div>
+        </div>
+    `
+
+    clearToolboxDom()
     app.innerHTML = html
 }
 
@@ -992,9 +962,70 @@ function buildReportNav()
         <div class="tool-nav-flexbox">
             <div onclick="buildDailyOrderReport()">Daily Orders</div>
             <div onclick="buildOrderDataTable()">All Orders</div>
-            <div onclick="buildCustomerDataTable()">All Customers</div>
+            <div onclick="buildAllSalesReport()">All Sales</div>
         </div>
     `
+
+    clearToolboxDom()
+    app.innerHTML = html
+}
+
+// Build Admin Tools Nav
+/*
+    this shows the admin tools
+    readily available
+
+    Written by Bryce Callahan 11/22/2024
+        updated by BC 11/26/2024
+*/
+function buildAdminToolsNav(adminID)
+{
+    // get app DOM
+    const app = document.getElementById('toolbox-nav')
+
+    let html = `
+        <div class="tool-nav-flexbox">
+            <div onclick="buildAdminDataTable()">All Employees</div>
+            <div onclick="buildEmployeeTaskAssignment()">Employee Task Assignment</div>
+            <div onclick="buildEmployeeEvents('${adminID}')">My Events</div>
+        </div>
+    `
+
+    clearToolboxDom()
+    app.innerHTML = html
+}
+
+// Build employee event list
+/*
+    this shows an employee all
+    the events they are assigned to
+    and allows them to update their status.
+
+    Written by Bryce Callahan 11/26/2024
+*/  
+function buildEmployeeEvents(adminID)
+{
+    removeToolboxForm()
+    let app = document.getElementById('toolbox')
+
+    let html = `
+        <h5>My Tasks</h5>
+        <div class="grid col-2">
+    `
+
+    orderList.forEach(order => {
+        if(order.servicedBy == adminID)
+        {
+            html += `
+                <div class="card">
+                    <h3 class="title">Order #${order.id}</h5>
+                    <h5 class="subtitle">Service Date: ${order.serviceDate} @ ${order.serviceTime}</h5>
+                </div>
+            `
+        }
+    });
+
+    html += `</div>`
     app.innerHTML = html
 }
 
@@ -1007,6 +1038,7 @@ function buildReportNav()
 */
 function buildDailyOrderReport()
 {
+    removeToolboxForm()
 
     let app = document.getElementById('toolbox')
 
@@ -1043,26 +1075,250 @@ function buildDailyOrderReport()
     app.innerHTML = html
 }
 
-// Build Admin tools
+// Build all sales report
 /*
-    calls all functions that admins
-    can use as a tool.
+    this report gets all the packages,
+    gets their price and shows the total
+    price made from the total packages ordered
 
-    Written by Bryce Callahan 11/19/2024
+    written by Bryce Callahan 11/25/2024
 */
-function buildAdminTools()
+function buildAllSalesReport()
 {
-    // get app DOM
-    const app = document.getElementById('toolbox-nav')
+    removeToolboxForm()
+    let app = document.getElementById('toolbox')
 
-    let html = ``
+    // add info to table
+    let html = `<h5>Total Sales</h5>`
 
-    html += buildAdminEditingTool()
+    // package 1
+    let p1Count = 0
+    let p1Sales = 0
 
-    // send to inner html
+    // package 2
+    let p2Count = 0
+    let p2Sales = 0
+
+    // package 3
+    let p3Count = 0
+    let p3Sales = 0
+
+    orderList.forEach(order => {
+        if(order.package == 1)
+        {
+           p1Count += 1
+           p1Sales += 100
+        }
+        if(order.package == 2)
+        {
+            p2Count += 1
+            p2Sales += 200
+        }
+        if(order.package == 3)
+        {
+            p3Count += 1
+            p3Sales += 300
+        }
+    })
+
+    // close table
+    html += `
+        <div class="grid col-3">
+            <div class="card">
+                <h3 class="title">Package 1</h5>
+                <h5 class="subtitle">Units Sold: ${p1Count}</h5>
+                <h5 class="subtitle">Total Sales: $${p1Sales}</h5>
+            </div>
+            <div class="card">
+                <h3 class="title">Package 2</h5>
+                <h5 class="subtitle">Units Sold: ${p2Count}</h5>
+                <h5 class="subtitle">Total Sales: $${p2Sales}</h5>
+            </div>
+            <div class="card">
+                <h3 class="title">Package 3</h5>
+                <h5 class="subtitle">Units Sold: ${p3Count}</h5>
+                <h5 class="subtitle">Total Sales: $${p3Sales}</h5>
+            </div>
+        </div>
+        <br/>
+        <hr/>
+        <br/>
+        <div class="card">
+            <h3 class="title">All Packages</h5>
+            <h5 class="subtitle">Units Sold: ${p1Count + p2Count + p3Count}</h5>
+            <h5 class="subtitle">Total Sales: ${p1Sales + p2Sales + p3Sales}</h5>
+         </div>
+    `
+
     app.innerHTML = html
 }
 
+// Assign Employee Task
+/*
+    this method shows the admin
+    all the orders and the respective
+    employee ID assigned to the order. An
+    edit button sends the admin to change
+    the default assignment (admin 1).
+
+    written by Bryce Callahan 11/25/2024
+*/
+function buildEmployeeTaskAssignment()
+{
+    // init app
+    let app = document.getElementById('toolbox')
+
+    // init today
+    let date = GetDate()
+    let indexThird = date.charAt(5)
+    let indexFourth = date.charAt(6)
+    let thisMonth = indexThird + indexFourth
+
+    // init html
+    let html = `<h5>This month's tasks</h5>
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Event Date</th>
+                <th>Event Time</th>
+                <th>Event Duration</th>
+                <th>Assigned Employee</th>
+                <th>Edit</th>
+            </tr> 
+    `
+
+    orderList.forEach(order => {
+        let indexFirst = order.serviceDate.charAt(5) 
+        let indexSec = order.serviceDate.charAt(6)
+        let orderMonth = indexFirst + indexSec
+
+        if(orderMonth == thisMonth)
+        {
+            html += `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.serviceDate}</td>
+                    <td>${order.serviceTime}</td>
+                    <td>${order.duration}</td>
+                    <td>${order.servicedBy}</td>
+                    <td><a href="#assignment-form" onclick="editOrderAssignment('${order.id}', '${order.servicedBy}')">Edit</a></td>
+                </tr>
+            `
+        }
+    });
+
+    html += `</table>`
+
+    app.innerHTML = html
+}
+
+// Edit order assignment to employee form
+/*
+    this method allows an admin to 
+    assign another admin to a customers
+    order event via a form.
+
+    written by Bryce Callahan 11/25/2024
+*/
+function editOrderAssignment(orderID, adminID)
+{
+    // init app
+    let app = document.getElementById('toolbox-form')
+    
+    let html = `
+        <h4>Employee Task Assignment</h4>
+                <form onsubmit="return false;" method="post" id="assignment-form">
+                    <div id="alert"></div>
+                    <div class="grid col-2">
+                        <div>
+                            <label for="orderID">Order ID</label><br>
+                            <input type="text" id="orderID" name="orderID" value="${orderID}" disabled>
+                        </div>
+
+                        <div> 
+                            <label for="empID">Employee ID</label><br>
+                            <input type="text" id="empID" name="empID" value="${adminID}">
+                        </div>
+                    </div>
+                    <button type="submit" onclick="updateAdminTask(orderID.value, empID.value)">Submit</button>
+                </form>
+    `
+
+    app.innerHTML = html
+}
+
+// Update Admin Task Assignment
+/*
+    this function enables an admin
+    to assign any other admin to any
+    order.
+
+    written by Bryce Callahan 11/25/2024
+*/
+async function updateAdminTask(orderID, adminID)
+{
+    // init alert dom
+    const alert = document.getElementById('alert')
+
+    // get url for order to edit
+    let orderURL = url + `order/${orderID}`
+
+    let adminExists = false
+
+    // check if admin exists
+    adminList.forEach(admin => {
+        if(admin.id == adminID)
+        {
+            adminExists = true
+        }
+    });
+
+    // if admin exists
+    if(adminExists)
+    {
+        // for each order
+        orderList.forEach(async order => {
+            // if order id = id
+            if(order.id == orderID)
+            {
+                // update locally
+                order.servicedBy = adminID
+                try 
+                {
+                    // put | update in db
+                    await fetch(orderURL, {
+                        method: "PUT",
+                        body: JSON.stringify(order),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        }
+                    })
+    
+                    
+                } catch (error) 
+                {
+                    // log
+                    console.log(error)
+                }
+            }
+        });
+
+        // show alert
+        alert.style.display = 'block'
+        alert.style.backgroundColor = 'var(--alert-pass)'
+        alert.innerHTML = `The Admin (ID: ${adminID}) has succesfully been scheduled to service Order #${orderID}.` 
+
+        // rebuild tasks
+        buildEmployeeTaskAssignment()
+    }
+    else
+    {
+        // show alert
+        alert.style.display = 'block'
+        alert.innerHTML = `The Admin ID '${adminID}' does not exist.`    
+    }
+
+}
 
 // Clear Form Fields Function | Admin & Customer Order
 /*
@@ -1100,6 +1356,40 @@ function clearAllFormFields(formToClear)
     }
 }
 
+// Clear toolbox
+/*
+    this function clears the admin dash
+    toolbox divs
+
+    Written by Bryce Callahan 11/26/2024
+*/
+function clearToolboxDom()
+{
+    document.getElementById("toolbox-nav").innerHTML = ''
+    document.getElementById("toolbox").innerHTML = ''
+    document.getElementById("toolbox-form").innerHTML = ''
+}
+
+// Clear toolbox
+/*
+    this function removes the admin dash
+    toolbox form
+
+    Written by Bryce Callahan 11/26/2024
+*/
+function removeToolboxForm()
+{
+    document.getElementById("toolbox-form").innerHTML = ''
+}
+
+// Get Date
+/*
+    this function returns today's
+    date in a string format 
+    yyyy-mm-dd
+
+    written by Bryce Callahan 11/23/2024
+*/
 function GetDate()
 {
     // get today's date | https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript

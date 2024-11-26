@@ -26,6 +26,14 @@ namespace api.Controllers
             database.AddNewOrder(myOrder);
         }
 
+        // PUT
+        [HttpPut("{myOrder}")]
+        public void Put(Order myOrder)
+        {
+            // update order
+            database.UpdateOrderService(myOrder);
+        }
+
         // // DELETE
         // [HttpDelete("{id}")]
         // public void Delete(int id)

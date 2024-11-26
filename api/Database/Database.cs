@@ -21,15 +21,9 @@ namespace api.Databases
         private OrderHandler orderHandler = new OrderHandler();
         private static List<Order> AllOrder = new List<Order>();
 
-        // Payment handler & static list
-        private PaymentHandler paymentHandler = new PaymentHandler();
-        private static List<Payment> AllPayment = new List<Payment>();
-
-        // Serviced handler & static list
-        private ServicedHandler servicedHandler = new ServicedHandler();
-        private static List<Serviced> AllServiced = new List<Serviced>();
-
-
+        // // Payment handler & static list | in case we wanna implement
+        // private PaymentHandler paymentHandler = new PaymentHandler();
+        // private static List<Payment> AllPayment = new List<Payment>();
 
 
         public Database()
@@ -150,6 +144,15 @@ namespace api.Databases
                 await GetAllOrders();
             }
         }
+        // Update order ServicedBy
+        public async void UpdateOrderService(Order Order)
+        {
+            if(cs != null)
+            {
+                await orderHandler.UpdateOrderServiced(cs, Order);
+                await GetAllOrders();
+            }
+        }
 
 
         /*
@@ -158,56 +161,17 @@ namespace api.Databases
                 Written by Hayden Walls 11/18/2024
                 updated by BC 11/21/2024
         */
-        // Get all customers
-        public async Task<List<Payment>> GetAllPayments()
-        {
-            if(cs != null)
-            {
-                // set list from payment handler
-                AllPayment = await paymentHandler.GetAllPayments(cs);
-            }
+        // // Get all customers
+        // public async Task<List<Payment>> GetAllPayments()
+        // {
+        //     if(cs != null)
+        //     {
+        //         // set list from payment handler
+        //         AllPayment = await paymentHandler.GetAllPayments(cs);
+        //     }
             
-            // return data
-            return AllPayment;
-        }
-
-
-        /*
-            Serviced TASKS
-
-                Written by Jeb 11/23/2024
-                updated by BC 11/23/2024
-        */
-        // Get all customers
-        public async Task<List<Serviced>> GetAllServiced()
-        {
-            if(cs != null)
-            {
-                // set list from serviced handler
-                AllServiced = await servicedHandler.GetAllServiced(cs);
-            }
-            
-            // return data
-            return AllServiced;
-        }
-        public async void AddNewServiced(Serviced serviced)
-        {
-            if(cs != null)
-            {
-                // set list from serviced handler
-                await servicedHandler.PostServiced(serviced, cs);
-                await GetAllServiced();
-            }
-        }
-
-        public async void DeleteServiced(int id)
-        {
-            if(cs != null)
-            {
-                // set list from serviced handler
-                await servicedHandler.DeleteServiced(id, cs);
-                await GetAllServiced();
-            }
-        }
+        //     // return data
+        //     return AllPayment;
+        // }
     }
 }
