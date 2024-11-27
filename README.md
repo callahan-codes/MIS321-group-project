@@ -90,6 +90,20 @@
   <li>Updated some payment handler logic and built the payment api in indexjs.</li>
 </ul>
 
+<h2>11/25-27/2024 | BC</h2>
+<ul>
+  <li>Merged Bryce and Haydens code.
+    <ul>
+      <li>Hayden made the controller, html, api for customer edits</li>
+    </ul>
+  </li>
+  <li>Made api, controller, logic handling for admin editing</li>
+  <li>Made admin task assignment functions and handling logic</li>
+  <li>Made api, controller, logic handling for order editing</li>
+  <li>Updated merged-testing branch</li>
+
+</ul>
+
 <hr/>
 <hr/>
 <hr/>
