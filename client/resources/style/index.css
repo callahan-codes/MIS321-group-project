@@ -337,6 +337,40 @@ main
     padding: 8px;
 }
 
+/* card */
+.card
+{
+    background-color: var(--light-grey);
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.card .title
+{
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--red);
+}
+
+.card .subtitle
+{
+    font-size: 22px;
+    color: var(--dark-grey);
+}
+
+.card .subtext
+{
+    font-size: 18px;
+    color: var(--dark-grey);
+}
+
+.card .message
+{
+    font-size: 20px;
+    color: var(--dark-grey);
+}
+
 /* form */
 form 
 {
@@ -375,6 +409,12 @@ select
     margin-bottom: 30px;
 }
 
+input[type="text"]:disabled
+{
+    background-color: var(--dark-grey);
+    color: var(--white);
+}
+
 /* form submit */
 button[type="submit"]
 {
@@ -392,6 +432,25 @@ button[type="submit"]:hover
     background-color: var(--dark-grey);
     color: var(--white);
     cursor: pointer;
+}
+
+button[type="button"]
+{
+    box-sizing: border-box;
+    padding: 8px;
+    font-size: 18px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background-color: var(--red);
+    color: var(--white);
+}
+
+button[type="button"]:hover
+{
+    cursor: pointer;
+    color: var(--dark-grey);
+    background-color: transparent;
+    border-color: var(--red);
 }
 
 /* form inputs on focus */

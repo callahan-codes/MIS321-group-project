@@ -14,11 +14,11 @@ namespace MyApp.Namespace
         private Database database = new Database();
 
        // GET
-        [HttpGet]
-        public Task<List<Payment>> Get()
-        {
-            // get all admin
-            return database.GetAllPayments();
-        }
+        // [HttpGet]
+        // public Task<List<Payment>> Get()
+        // {
+        //     // get all admin
+        //     return database.GetAllPayments();
+        // }
     }
 }

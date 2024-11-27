@@ -3,6 +3,7 @@ using api.Databases;
 using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers
 {
+    // written by Bryce Callahan
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -24,6 +25,14 @@ namespace api.Controllers
         {
             // add new admin
             database.AddNewOrder(myOrder);
+        }
+
+        // PUT
+        [HttpPut("{myOrder}")]
+        public void Put(Order myOrder)
+        {
+            // update order
+            database.UpdateOrderService(myOrder);
         }
 
         // // DELETE

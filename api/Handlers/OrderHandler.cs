@@ -5,6 +5,8 @@ namespace api.Handlers
     public class OrderHandler
     {
         // created by Connor G 11/18/24
+        // updated by BC 11/23/2024
+        // updated by BC 11/26/2024
         public async Task<List<Order>> GetAllOrders(string cs)
         {
 
@@ -32,14 +34,8 @@ namespace api.Handlers
                     Package = reader.GetInt32(8), 
                     OrderedBy = reader.GetInt32(9), 
                     ServicedBy = reader.GetInt32(10),
-                    PaymentId = 1
+                    ServiceCompleted = reader.GetBoolean(11)
                 });
-            }
-
-            Console.WriteLine("Returned Orders: ");
-            foreach(var order in myOrders)
-            {
-                Console.WriteLine($"\t- ID: {order.Id}");
             }
 
             return myOrders;
@@ -69,14 +65,14 @@ namespace api.Handlers
             int orderPackage = order.Package;
             int orderOrderedBy = order.OrderedBy;
             int orderServicedBy = order.ServicedBy;
-            int paymentID = order.PaymentId;
+            bool orderServiceCompleted = order.ServiceCompleted;
 
             // custid
             // paymentid
 
             // command text
-            command.CommandText = @$"INSERT INTO titletowncatering.order(OrderId, OrderDate, OrderTime, OrderCancelled, ServiceDate, ServiceTime, ServiceAddress, ServiceDuration, PackageType, OrderedBy, ServicedBy, PaymentId) 
-            VALUES(@orderID, @orderDate, @orderTime, @orderCancelled, @orderServiceDate, @orderServiceTime, @orderServiceAddress, @orderDuration, @orderPackage, @orderedBy, @servicedBy, @paymentID);";
+            command.CommandText = @$"INSERT INTO titletowncatering.order(OrderId, OrderDate, OrderTime, OrderCancelled, ServiceDate, ServiceTime, ServiceAddress, ServiceDuration, PackageType, OrderedBy, ServicedBy, ServiceComplete) 
+            VALUES(@orderID, @orderDate, @orderTime, @orderCancelled, @orderServiceDate, @orderServiceTime, @orderServiceAddress, @orderDuration, @orderPackage, @orderedBy, @servicedBy, @serviceCompleted);";
 
             Console.WriteLine(command.CommandText);
 
@@ -92,7 +88,7 @@ namespace api.Handlers
             command.Parameters.AddWithValue("@orderPackage", orderPackage);
             command.Parameters.AddWithValue("@orderedBy", orderOrderedBy);
             command.Parameters.AddWithValue("@servicedBy", orderServicedBy);
-            command.Parameters.AddWithValue("@paymentID", paymentID);
+            command.Parameters.AddWithValue("@serviceCompleted", orderServiceCompleted);
             
 
             // prepare command
@@ -101,123 +97,30 @@ namespace api.Handlers
             // execute command
             command.ExecuteNonQuery();
         }
-        
-//    //Created by Connor G 11/18/24
-//          private async Task<List<Order>> SelectOrders(string sql, List<MySqlParameter> parms)
-//         {
-//             List<Order> myOrders = new();
 
-//             using var connection = new MySqlConnection(cs);
-//             await connection.OpenAsync();
-//             using var command = new MySqlCommand(sql, connection);
+        // connect to db | update data
+        public async Task UpdateOrderServiced(string cs, Order myOrder)
+        {
+            // log
+            Console.WriteLine($"Updating Order {myOrder.Id}");
 
-//             if (parms != null)
-//             {
-//                 command.Parameters.AddRange(parms.ToArray());
-//             }
-//             using var reader = await command.ExecuteReaderAsync();
+            // instantiate mysqlconnection object
+            using var connection = new MySqlConnection(cs);
 
-//             while (await reader.ReadAsync())
-//             {
-//                 myOrders.Add(new Order
-//                 {
-//                     Id = reader.GetInt32(0),
-//                     Date = reader.GetString(1),
-//                     Time = reader.GetString(2),
-//                     Package = reader.GetInt32(3),
-//                     PackageHours = reader.GetInt32(4),
-//                     Cancelled = reader.GetBoolean(5),
-//                     ServiceDate = reader.GetString(6),
-//                     ServiceTime = reader.GetString(7),
-//                     OrderedBy = reader.GetString(8),
-//                     ServicedBy = reader.GetString(9)
-//                 });
-//             }
+            // open connection
+            await connection.OpenAsync();
+            
+            // create sql command for db
+            using var command = new MySqlCommand("", connection);
 
-//             return myOrders;
-//         }
+            // command text | soft delete
+            command.CommandText = @$"UPDATE titletowncatering.order SET OrderDate = '{myOrder.Date}', OrderTime = '{myOrder.Time}', OrderCancelled = {myOrder.Cancelled}, ServiceDate = '{myOrder.ServiceDate}', ServiceTime = '{myOrder.ServiceTime}', ServiceAddress = '{myOrder.ServiceAddress}', ServiceDuration = {myOrder.Duration}, PackageType = {myOrder.Package}, OrderedBy = {myOrder.OrderedBy}, ServicedBy = {myOrder.ServicedBy}, ServiceComplete = {myOrder.ServiceCompleted} WHERE OrderId = {myOrder.Id};";
 
-//         //Created by Connor G 11/18/24
-//         private async Task OrdersNoReturn(string cs, string sql, List<MySqlParameter> parms)
-//         {
-//             using var connection = new MySqlConnection(cs);
-//             await connection.OpenAsync();
-//             using var command = new MySqlCommand(sql, connection);
+            // prepare command
+            command.Prepare();
 
-//             if (parms != null)
-//             {
-//                 command.Parameters.AddRange(parms.ToArray());
-//             }
-//             await command.ExecuteNonQueryAsync();
-//         }
-
-
-//         //Created by Connor G 11/18/24
-//         public async Task<List<Order>> GetOrderById(int id)
-//         {
-//             string sql = "SELECT * FROM orders WHERE Id = @id;";
-//             List<MySqlParameter> parms = new();
-//             parms.Add(new MySqlParameter(@"id", MySqlDbType.Int32) { Value = id });
-//             return await SelectOrders(sql, parms);
-//         }
-
-//         //Created by Connor G 11/18/24
-//         public async Task InsertOrder(Order myOrder)
-//         {
-//             string sql = @"INSERT INTO orders (Date, Time, Package, PackageHours, Cancelled, ServiceDate, ServiceTime, OrderedBy, ServicedBy)
-//                            VALUES (@Date, @Time, @Package, @PackageHours, @Cancelled, @ServiceDate, @ServiceTime, @OrderedBy, @ServicedBy);";
-
-//             List<MySqlParameter> parms = new();
-//             parms.Add(new MySqlParameter(@"Date", MySqlDbType.String) { Value = myOrder.Date });
-//             parms.Add(new MySqlParameter(@"Time", MySqlDbType.String) { Value = myOrder.Time });
-//             parms.Add(new MySqlParameter(@"Package", MySqlDbType.Int32) { Value = myOrder.Package });
-//             parms.Add(new MySqlParameter(@"PackageHours", MySqlDbType.Int32) { Value = myOrder.PackageHours });
-//             parms.Add(new MySqlParameter(@"Cancelled", MySqlDbType.Bit) { Value = myOrder.Cancelled });
-//             parms.Add(new MySqlParameter(@"ServiceDate", MySqlDbType.String) { Value = myOrder.ServiceDate });
-//             parms.Add(new MySqlParameter(@"ServiceTime", MySqlDbType.String) { Value = myOrder.ServiceTime });
-//             parms.Add(new MySqlParameter(@"OrderedBy", MySqlDbType.Int32) { Value = myOrder.OrderedBy });
-//             parms.Add(new MySqlParameter(@"ServicedBy", MySqlDbType.Int32) { Value = myOrder.ServicedBy });
-
-//             await OrdersNoReturn(sql, parms);
-//         }
-
-//        //Created by Connor G 11/18/24
-//         public async Task UpdateOrder(Order myOrder, int id)
-//         {
-//             string sql = @"UPDATE orders 
-//                            SET Date = @Date, 
-//                                Time = @Time, 
-//                                Package = @Package, 
-//                                PackageHours = @PackageHours, 
-//                                Cancelled = @Cancelled, 
-//                                ServiceDate = @ServiceDate, 
-//                                ServiceTime = @ServiceTime, 
-//                                OrderedBy = @OrderedBy, 
-//                                ServicedBy = @ServicedBy
-//                            WHERE Id = @id;";
-
-//             List<MySqlParameter> parms = new();
-//             parms.Add(new MySqlParameter(@"id", MySqlDbType.Int32) { Value = id });
-//             parms.Add(new MySqlParameter(@"Date", MySqlDbType.String) { Value = myOrder.Date });
-//             parms.Add(new MySqlParameter(@"Time", MySqlDbType.String) { Value = myOrder.Time });
-//             parms.Add(new MySqlParameter(@"Package", MySqlDbType.Int32) { Value = myOrder.Package });
-//             parms.Add(new MySqlParameter(@"PackageHours", MySqlDbType.Int32) { Value = myOrder.PackageHours });
-//             parms.Add(new MySqlParameter(@"Cancelled", MySqlDbType.Bit) { Value = myOrder.Cancelled });
-//             parms.Add(new MySqlParameter(@"ServiceDate", MySqlDbType.String) { Value = myOrder.ServiceDate });
-//             parms.Add(new MySqlParameter(@"ServiceTime", MySqlDbType.String) { Value = myOrder.ServiceTime });
-//             parms.Add(new MySqlParameter(@"OrderedBy", MySqlDbType.Int32) { Value = myOrder.OrderedBy });
-//             parms.Add(new MySqlParameter(@"ServicedBy", MySqlDbType.Int32) { Value = myOrder.ServicedBy });
-
-//             await OrdersNoReturn(sql, parms);
-//         }
-
-//         //Created by Connor G 11/18/24
-//         public async Task DeleteOrder(int id)
-//         {
-//             string sql = "UPDATE orders SET Cancelled = 1 WHERE Id = @id;";
-//             List<MySqlParameter> parms = new();
-//             parms.Add(new MySqlParameter(@"id", MySqlDbType.Int32) { Value = id });
-//             await OrdersNoReturn(sql, parms);
-//         }
+            // execute command
+            command.ExecuteNonQuery();
+        }
     }
 }

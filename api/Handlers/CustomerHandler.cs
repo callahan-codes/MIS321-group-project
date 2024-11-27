@@ -4,6 +4,7 @@ namespace api.Handlers
 {
     /*
         Written by Bryce Callahan 11/15/2024
+            updated by BC 11/26/2024
 
         this is the customer handler than gets/places all 
         customer data from/to the TTC customer db table.
@@ -14,7 +15,7 @@ namespace api.Handlers
         // Get All Customers
         public async Task<List<Customer>> GetAllCustomers(string cs)
         {
-            // init empty admin list
+            // init empty customerlist
             List<Customer> myCustomers = [];
 
             // instantiate mysqlconnection object
@@ -36,21 +37,13 @@ namespace api.Handlers
                 string lname = reader.GetString(2);
                 string email = reader.GetString(3);
 
-                // add admine values to new admin list
+                // add customer values to new customerlist
                 myCustomers.Add(new Customer(){ 
                     Id = id,
                     FName = fname,
                     LName = lname,
                     Email = email,
                 });
-            }
-
-            
-            // log admins pulled to console | will remove after testing.
-            Console.WriteLine($"Returned Customer List:");
-            foreach(var customer in myCustomers)
-            {
-                Console.WriteLine($"\t- ID: {customer.Id} | Email: {customer.Email}");
             }
 
             // return list
@@ -90,8 +83,34 @@ namespace api.Handlers
             // execute command
             command.ExecuteNonQuery();
         }
+
+        
+        // connect to db | update data
+        public async Task UpdateCustomerInfo(string cs, Customer customer)
+        {
+            // log
+            Console.WriteLine($"Updating Order {customer.Id}");
+
+            // instantiate mysqlconnection object
+            using var connection = new MySqlConnection(cs);
+
+            // open connection
+            await connection.OpenAsync();
+            
+            // create sql command for db
+            using var command = new MySqlCommand("", connection);
+
+            // command text | soft delete
+            command.CommandText = @$"UPDATE customer SET CustFName = '{customer.FName}', CustLName = '{customer.LName}', CustEmail = '{customer.Email}' WHERE CustId = {customer.Id};";
+
+            // prepare command
+            command.Prepare();
+
+            // execute command
+            command.ExecuteNonQuery();
+        }
     
-        // Delete An Admin
+        // Delete An customer
         public async Task DeleteCustomer(string cs, int customerID)
         {
             Console.WriteLine($"Deleting Recipe {customerID} {cs}");

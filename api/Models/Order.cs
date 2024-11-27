@@ -1,5 +1,6 @@
 // written by Bryce Callahan 10/30/2024
     // updated by BC 11/19/2024
+    // updated by BC 11/26/2024
 
 namespace api.Models
 {
@@ -27,7 +28,7 @@ namespace api.Models
         public int OrderedBy { get; set; } // customer ID
         // who the order is serviced by
         public int ServicedBy { get; set; } // admin ID
-        // the payment id
-        public int PaymentId { get; set; } // payment id
+        // has been serviced
+        public bool ServiceCompleted { get; set; }
     }
 }

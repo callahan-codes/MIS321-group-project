@@ -21,9 +21,9 @@ namespace api.Databases
         private OrderHandler orderHandler = new OrderHandler();
         private static List<Order> AllOrder = new List<Order>();
 
-        // Payment handler & static list
-        private PaymentHandler paymentHandler = new PaymentHandler();
-        private static List<Payment> AllPayment = new List<Payment>();
+        // // Payment handler & static list | in case we wanna implement
+        // private PaymentHandler paymentHandler = new PaymentHandler();
+        // private static List<Payment> AllPayment = new List<Payment>();
 
 
         public Database()
@@ -60,6 +60,17 @@ namespace api.Databases
             {
                 // set list from admin handler
                 await adminHandler.AddNewAdmin(cs, admin);
+                await GetAllAdmins();
+            }
+        }
+
+        // Edit Admin
+        public async void UpdateAdminInfo(Admin admin)
+        {
+            if(cs != null)
+            {
+                // set list from admin handler
+                await adminHandler.UpdateAdminInfo(cs, admin);
                 await GetAllAdmins();
             }
         }
@@ -104,6 +115,17 @@ namespace api.Databases
             }
         }
 
+        // Update order ServicedBy
+        public async void UpdateCustomerInfo(Customer customer)
+        {
+            if(cs != null)
+            {
+                await customerHandler.UpdateCustomerInfo(cs, customer);
+                await GetAllCustomers();
+            }
+        }
+
+
         // Delete Customer
         public async void DeleteCustomer(int customerID)
         {
@@ -144,6 +166,15 @@ namespace api.Databases
                 await GetAllOrders();
             }
         }
+        // Update order ServicedBy
+        public async void UpdateOrderService(Order Order)
+        {
+            if(cs != null)
+            {
+                await orderHandler.UpdateOrderServiced(cs, Order);
+                await GetAllOrders();
+            }
+        }
 
 
         /*
@@ -152,17 +183,17 @@ namespace api.Databases
                 Written by Hayden Walls 11/18/2024
                 updated by BC 11/21/2024
         */
-        // Get all customers
-        public async Task<List<Payment>> GetAllPayments()
-        {
-            if(cs != null)
-            {
-                // set list from payment handler
-                AllPayment = await paymentHandler.GetAllPayments(cs);
-            }
+        // // Get all customers
+        // public async Task<List<Payment>> GetAllPayments()
+        // {
+        //     if(cs != null)
+        //     {
+        //         // set list from payment handler
+        //         AllPayment = await paymentHandler.GetAllPayments(cs);
+        //     }
             
-            // return data
-            return AllPayment;
-        }
+        //     // return data
+        //     return AllPayment;
+        // }
     }
 }
