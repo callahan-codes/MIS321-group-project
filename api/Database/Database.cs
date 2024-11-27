@@ -64,6 +64,17 @@ namespace api.Databases
             }
         }
 
+        // Edit Admin
+        public async void UpdateAdminInfo(Admin admin)
+        {
+            if(cs != null)
+            {
+                // set list from admin handler
+                await adminHandler.UpdateAdminInfo(cs, admin);
+                await GetAllAdmins();
+            }
+        }
+
         // Delete Admin
         public async void DeleteAdmin(int adminID)
         {

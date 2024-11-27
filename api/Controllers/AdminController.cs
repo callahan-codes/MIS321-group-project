@@ -37,6 +37,14 @@ namespace api.Controllers
             database.AddNewAdmin(myAdmin);
         }
 
+        // PUT
+        [HttpPut("{myAdmin}")]
+        public void Put(Admin myAdmin)
+        {
+            // update admin
+            database.UpdateAdminInfo(myAdmin);
+        }
+
         // DELETE
         [HttpDelete("{id}")]
         public void Delete(int id)

@@ -38,12 +38,6 @@ namespace api.Handlers
                 });
             }
 
-            Console.WriteLine("Returned Orders: ");
-            foreach(var order in myOrders)
-            {
-                Console.WriteLine($"\t- ID: {order.Id}");
-            }
-
             return myOrders;
         }
 
@@ -120,7 +114,7 @@ namespace api.Handlers
             using var command = new MySqlCommand("", connection);
 
             // command text | soft delete
-            command.CommandText = @$"UPDATE titletowncatering.order SET ServicedBy = {myOrder.ServicedBy} WHERE OrderId = {myOrder.Id};";
+            command.CommandText = @$"UPDATE titletowncatering.order SET OrderDate = '{myOrder.Date}', OrderTime = '{myOrder.Time}', OrderCancelled = {myOrder.Cancelled}, ServiceDate = '{myOrder.ServiceDate}', ServiceTime = '{myOrder.ServiceTime}', ServiceAddress = '{myOrder.ServiceAddress}', ServiceDuration = {myOrder.Duration}, PackageType = {myOrder.Package}, OrderedBy = {myOrder.OrderedBy}, ServicedBy = {myOrder.ServicedBy}, ServiceComplete = {myOrder.ServiceCompleted} WHERE OrderId = {myOrder.Id};";
 
             // prepare command
             command.Prepare();

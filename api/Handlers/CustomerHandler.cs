@@ -46,14 +46,6 @@ namespace api.Handlers
                 });
             }
 
-            
-            // log customer pulled to console | will remove after testing.
-            Console.WriteLine($"Returned Customer List:");
-            foreach(var customer in myCustomers)
-            {
-                Console.WriteLine($"\t- ID: {customer.Id} | Email: {customer.Email}");
-            }
-
             // return list
             return myCustomers;
         }

@@ -860,7 +860,7 @@ function buildOrderDataTable()
 */
 function buildAdminDataTable()
 {
-    removeToolboxForm()
+    // removeToolboxForm()
     const app = document.getElementById('toolbox')
     // add order info to table
     let html = `<h5>All Admins</h5>
@@ -945,11 +945,36 @@ function buildCustomerToolsNav()
         <div class="tool-nav-flexbox">
             <div onclick="buildCustomerDataTable()">All Customers</div>
             <div onclick="buildCustomerEditTool()">Edit Customer data</div>
+            <div onclick="buildCustomerOrdersTool()">Show Customer orders</div>
         </div>
     `
 
     clearToolboxDom()
     app.innerHTML = html
+}
+
+function buildCustomerOrdersTool()
+{
+    const app = document.getElementById('toolbox')
+
+    let html = `
+        <h5>Search Customer Orders</h5>
+        <form onsubmit="return false;" method="post" id="customer-search-form">
+            <div id="alert"></div>
+
+            <label for="custEmail">Customer Email</label><br>
+            <input type="text" id="custEmail" name="custEmail" placeholder="search">
+
+            <button type="submit" onclick="showCustomerOrders(custEmail.value)">Search</button>
+        </form>
+    `
+
+    app.innerHTML = html
+}
+
+function showCustomerOrders(customerEmail)
+{
+    console.log('This is where we will run the code to call the controller code to run a sql statement that joins the dbs as gets all orders with the matching custEmail')
 }
 
 // Build Reports
@@ -1015,7 +1040,39 @@ function buildEmployeeEvents(adminID)
     let app = document.getElementById('toolbox')
 
     let html = `
-        <h5>My Tasks</h5>
+        <h5>My Non-completed Tasks</h5>
+        <div class="grid col-2">
+    `
+
+    orderList.forEach(order => {
+
+        if(order.servicedBy == adminID && order.serviceCompleted == false)
+        {
+            html += `
+            <div class="card">
+                <h3 class="title">Order #${order.id}</h5>
+                <h5 class="subtitle">Service Date: ${order.serviceDate} @ ${order.serviceTime}</h5>
+                <hr/>
+                <h5 class="subtext">Address: ${order.serviceAddress}</h5>
+                <h5 class="subtext">Package: ${order.package}</h5>
+                <hr/>
+            `
+
+            html += `
+                    <h5 class="subtext" id="completed-status-${order.id}">Completed: ${order.serviceCompleted}</h5>
+                    <button type="button" id="completed-btn-${order.id}" onclick="completeService(${order.id})">Mark as Completed</button>
+                </div>
+            `
+            
+        }
+    })
+
+    html += `
+        </div>
+        <br/>
+        <hr/>
+        <br/>
+        <h5>All My Tasks</h5>
         <div class="grid col-2">
     `
 
@@ -1030,16 +1087,72 @@ function buildEmployeeEvents(adminID)
                     <h5 class="subtext">Address: ${order.serviceAddress}</h5>
                     <h5 class="subtext">Package: ${order.package}</h5>
                     <hr/>
-                    <h5 class="subtext" style="color:var(--red)">Completed: ${order.serviceCompleted}</h5>
-                    <input type="checkbox" id="completed" name="completed">
-                    <label id="completed-label" for="completed" style="color:var(--dark-grey)">Mark as complete</label><br>
-                </div>
-            `
+                `
+            if(order.serviceCompleted == true)
+            {
+                html += `
+                        <h5 class="subtext" id="completed-status-${order.id}">Completed: ${order.serviceCompleted}</h5>
+                    </div>
+                `
+            } else
+            {
+                html += `
+                        <h5 class="subtext" id="completed-status-${order.id}">Completed: ${order.serviceCompleted}</h5>
+                        <button type="button" id="completed-btn-${order.id}" onclick="completeService(${order.id})">Mark as Completed</button>
+                    </div>
+                `
+            }
         }
     });
 
     html += `</div>`
     app.innerHTML = html
+}
+
+// Update service completion status
+/*
+    this updates the status of completion
+    for an order by an admin.
+
+    written by Bryce Callahan 11/26/2024
+*/
+async function completeService(orderID)
+{
+    orderList.forEach(async order => {
+        if(order.id == orderID)
+        {
+            order.serviceCompleted = true
+
+            try 
+            {
+                let orderURL = url + `order/${orderID}`
+
+                // put | update in db
+                await fetch(orderURL, {
+                    method: "PUT",
+                    body: JSON.stringify(order),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+
+                // show alert
+                const button = document.getElementById(`completed-btn-${orderID}`)
+                const label = document.getElementById(`completed-status-${orderID}`)
+
+                label.innerHTML = `Completed: ${order.serviceCompleted}`
+
+                button.style.backgroundColor = "var(--alert-pass)" 
+                button.style.borderColor = "var(--alert-pass)" 
+                button.innerHTML = "Completed"
+                
+            } catch (error) 
+            {
+                // log
+                console.log(error)
+            }
+        }
+    });
 }
 
 // Show daily orders
@@ -1178,6 +1291,7 @@ function buildAllSalesReport()
 */
 function buildEmployeeTaskAssignment()
 {
+    removeToolboxForm()
     // init app
     let app = document.getElementById('toolbox')
 
@@ -1220,8 +1334,34 @@ function buildEmployeeTaskAssignment()
         }
     });
 
-    html += `</table>`
+    html += `
+        </table>
+        <h5>All Tasks</h5>
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Event Date</th>
+                <th>Event Time</th>
+                <th>Event Duration</th>
+                <th>Assigned Employee</th>
+                <th>Edit</th>
+            </tr> 
+    `
 
+    orderList.forEach(order => {
+        html += `
+            <tr>
+                <td>${order.id}</td>
+                <td>${order.serviceDate}</td>
+                <td>${order.serviceTime}</td>
+                <td>${order.duration}</td>
+                <td>${order.servicedBy}</td>
+                <td><a href="#assignment-form" onclick="editOrderAssignment('${order.id}', '${order.servicedBy}')">Edit</a></td>
+            </tr>
+        `
+    });
+
+    html += `</table>`
     app.innerHTML = html
 }
 
@@ -1262,8 +1402,8 @@ function editOrderAssignment(orderID, adminID)
 
 // Edit admin data
 /*
-    this method edits the admin
-    data and saves to the db.
+    this method shows the form to edit
+    admin data
 
     written by Bryce Callahan 11/26/2024
 */
@@ -1293,7 +1433,7 @@ function editAdminDataForm(adminID)
                         <input type="text" id="adminPassword" name="adminPassword" value="${admin.password}" autocomplete="off">
                     </div>
                 </div>
-                <button type="submit" onclick="createNewAdmin()">Submit</button>
+                <button type="submit" onclick="updateAdminData(${admin.id}, adminEmail.value, adminPassword.value)">Submit</button>
             </form>
         `
         }
@@ -1303,11 +1443,57 @@ function editAdminDataForm(adminID)
     app.innerHTML = html
 }
 
+// Update admin data
+/*
+    this function edits the admin 
+    data in the db
+
+    written by Bryce Callahan 11/27/2024
+*/
+async function updateAdminData(adminID, adminEmail, adminPass) {
+    
+    const alert = document.getElementById('alert')
+    alert.style.display = 'none'
+
+    adminList.forEach(async admin => {
+        if(admin.id === adminID)
+        {
+            try 
+            {
+                let adminURL = url + `admin/${adminID}`
+                admin.email = adminEmail
+                admin.password = adminPass
+                // put | update in db
+                await fetch(adminURL, {
+                    method: "PUT",
+                    body: JSON.stringify(admin),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+
+                // show alert
+                alert.style.display = 'block'
+                alert.style.backgroundColor = 'var(--alert-pass)'
+                alert.innerHTML = `The Admin (ID: ${adminID}) has succesfully been edited.` 
+
+                buildAdminDataTable()
+
+                
+            } catch (error) 
+            {
+                // log
+                console.log(error)
+            }
+        }
+    });
+}
+
 // Update Admin Task Assignment
 /*
     this function enables an admin
-    to assign any other admin to any
-    order.
+    to assign any other existing admin 
+    to any existing order.
 
     written by Bryce Callahan 11/25/2024
 */
@@ -1591,20 +1777,17 @@ async function submitCustomerEdit() {
         // show alert
         alert.style.display = 'block'
         alert.style.backgroundColor = 'var(--alert-pass)'
-        alert.innerHTML = `The Customer (ID: ${customerList[customerIndex]}) has succesfully been edited.` 
+        alert.innerHTML = `The Customer (ID: ${customerList[customerIndex].id}) has succesfully been edited.` 
 
         // Rebuild the customer table
         document.getElementById('toolbox').innerHTML = `
             ${createCustomerEditTable()}
-            <div id="editFormSection">
-                ${createCustomerEditForm()}
-            </div>
         `;
         console.log(customerList[customerIndex])
     } else {
         // show alert
         alert.style.display = 'block'
         alert.style.backgroundColor = 'var(--red)'
-        alert.innerHTML = `The Customer (ID: ${customerList[customerIndex]}) was not found.` 
+        alert.innerHTML = `The Customer (ID: ${customerList[customerIndex].id}) was not found.` 
     }
 }

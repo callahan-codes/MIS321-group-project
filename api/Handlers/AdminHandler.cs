@@ -42,14 +42,6 @@ namespace api.Handlers
                 });
             }
 
-            
-            // log admins pulled to console | will remove after testing.
-            Console.WriteLine($"Returned Admin List:");
-            foreach(var admin in myAdmins)
-            {
-                Console.WriteLine($"\t- ID: {admin.Id} | Email: {admin.Email}");
-            }
-
             // return list
             return myAdmins;
         }
@@ -86,6 +78,31 @@ namespace api.Handlers
             command.ExecuteNonQuery();
         }
     
+        // Edit Admin
+        public async Task UpdateAdminInfo(string cs, Admin admin)
+        {
+            // log
+            Console.WriteLine($"Updating Admin {admin.Id}\nAdmin Data: {admin.Email} {admin.Password}");
+
+            // instantiate mysqlconnection object
+            using var connection = new MySqlConnection(cs);
+
+            // open connection
+            await connection.OpenAsync();
+            
+            // create sql command for db
+            using var command = new MySqlCommand("", connection);
+
+            // command text | soft delete
+            command.CommandText = @$"UPDATE titletowncatering.admin SET AdminPassword = '{admin.Password}', AdminEmail = '{admin.Email}' WHERE AdminId = {admin.Id};";
+
+            // prepare command
+            command.Prepare();
+
+            // execute command
+            command.ExecuteNonQuery();
+        }
+
         // Delete An Admin
         public async Task DeleteAdmin(string cs, int adminID)
         {
