@@ -514,12 +514,50 @@ function appScreenDisplay(mode)
             buildCustomerOrderForm()
             screen.style.display = 'block'
             break
+        // if mode == package, build and show screen
+        case 'packages':
+            buildPackageDetailsPage();
+            screen.style.display = 'block';
+            break;
         // defualt, hide screen
         default:
             screen.style.display = 'none'
             break
     }
 }
+// Created by Connor Gilstrap 12/1/2024
+function buildPackageDetailsPage() {
+    // Get app DOM
+    const app = document.getElementById('app');
+
+    // Initialize HTML content
+    let html = `<div class="container">
+                    <h4 class="text-center">Packages</h4>
+                    <p class="text-center">Explore our packages tailored to meet your event needs.</p>
+                    
+                    <div class="grid col-3">
+                        <div class="infobox2">
+                            <h5>Package 1</h5>
+                            <p>Package 1 is an excellent choice for small to medium-sized gatherings, providing all the essential raw materials you need to make your event a success. This package includes quality hot dogs, hamburger meat, and other essentials to create a memorable experience for your guests. Designed to feed approximately 50 people, Package 1 is perfect for casual events such as family reunions, community picnics, or birthday celebrations. At just $100 per hour, it offers a cost-effective solution for hosting a fun and delicious event without the hassle of sourcing ingredients yourself.</p>
+                        </div>
+                        
+                        <div class="infobox2">
+                            <h5>Package 2</h5>
+                            <p>Package 2 takes the stress out of hosting by providing not only the raw materials but also the convenience of professional cooking services. This package includes high-quality hot dogs, hamburger meat, fresh buns, and all the necessary utensils to ensure your event runs smoothly. Designed to feed approximately 50 people, this package is ideal for larger gatherings such as corporate events, community celebrations, or milestone parties. At $200 per hour, our team will expertly prepare and cook the food for you, allowing you to relax and enjoy the occasion with your guests while we handle the culinary details..</p>
+                        </div>
+                        
+                        <div class="infobox2">
+                            <h5>Package 3</h5>
+                            <p>Package 3 offers a premium catering experience, providing not only all the essentials from previous packages including high-quality hot dogs, hamburger meat, fresh buns, and utensils but also a dedicated wait staff and cleanup crew. This all-inclusive package is designed to ensure a seamless and stress-free event, from setup to service to the final clean-up. Feeding approximately 50 people, Package 3 is perfect for formal gatherings, weddings, or high-profile corporate events where attention to detail and superior service are paramount. At $300 per hour, this package allows you to enjoy your event to the fullest while we take care of everything else.</p>
+                        </div>
+                    </div>
+                </div>`;
+
+    // Set the inner HTML of the app container
+    app.innerHTML = html;
+}
+
+
 
 // App Screen Build Function | Admin Creation
 /*

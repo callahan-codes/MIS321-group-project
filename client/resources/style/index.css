@@ -315,6 +315,22 @@ main
     margin: 20px auto
 }
 
+/* infobox2 with red background and black text */
+.infobox2 {
+    width: 100%;
+    background-color: rgb(158,27,50);;
+    color: black;
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 10px;
+    padding-bottom: 15px;
+}
+
+/* infobox2 text */
+.infobox2 p {
+    margin: 20px auto;
+}
+
 /* info box with image */
 .image-box 
 {
@@ -598,6 +614,7 @@ a {
     {
         font-size: 20px;
     }
+
 
 
     .col-2,
