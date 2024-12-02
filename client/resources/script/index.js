@@ -974,23 +974,8 @@ function buildCustomerOrdersTool()
 
 function showCustomerOrders(customerEmail)
 {
-
-    let customerLost = [
-        {
-            Id : 1,
-            email : "jebbradford33@gmail.com"
-        }
-    ]
-    let orderLost = [
-        {
-            orderedBy : 1,
-            package : 2
-        }
-    ]
-
-    console.log('This is where we will run the code to call the controller code to run a sql statement that joins the dbs as gets all orders with the matching custEmail')
     // Find the customer id that matches the customer email
-    let customer = customerLost.filter((customer) => {
+    let customer = customerList.filter((customer) => {
         console.log(customer.email)
         console.log(customerEmail)
         if(customerEmail = customer.email){
@@ -999,7 +984,7 @@ function showCustomerOrders(customerEmail)
     })
     console.log(customer[0].Id)
     // Find the orders with OrderedBy that matches customer.Id
-    let orders = orderLost.filter((order => {
+    let orders = orderList.filter((order => {
         if(customer[0].Id = order.orderedBy){
             return order
         }
@@ -1029,7 +1014,7 @@ function showCustomerOrders(customerEmail)
         // ALSO I DON'T KNOW IF IT IS "order.Id" or "order.id" id/Id
         html += `
             <tr>
-                <td>${order.Id}</td>
+                <td>${order.id}</td>
                 <td>${order.package}</td>
             </tr>
         `
