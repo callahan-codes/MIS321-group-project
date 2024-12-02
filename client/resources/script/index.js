@@ -1018,6 +1018,7 @@ function buildAdminToolsNav(adminID)
         <div class="tool-nav-flexbox">
             <div onclick="buildAdminDataTable()">Edit Employee Data</div>
             <div onclick="buildEmployeeTaskAssignment()">Employee Task Assignment</div>
+            <div onclick="buildOrderEditingTool()">Edit Orders</div>
             <div onclick="buildEmployeeEvents('${adminID}')">My Events</div>
         </div>
     `
@@ -1040,7 +1041,7 @@ function buildEmployeeEvents(adminID)
     let app = document.getElementById('toolbox')
 
     let html = `
-        <h5>My Non-completed Tasks</h5>
+        <h5>My Uncompleted Tasks</h5>
         <div class="grid col-2">
     `
 
@@ -1066,44 +1067,6 @@ function buildEmployeeEvents(adminID)
             
         }
     })
-
-    html += `
-        </div>
-        <br/>
-        <hr/>
-        <br/>
-        <h5>All My Tasks</h5>
-        <div class="grid col-2">
-    `
-
-    orderList.forEach(order => {
-        if(order.servicedBy == adminID)
-        {
-            html += `
-                <div class="card">
-                    <h3 class="title">Order #${order.id}</h5>
-                    <h5 class="subtitle">Service Date: ${order.serviceDate} @ ${order.serviceTime}</h5>
-                    <hr/>
-                    <h5 class="subtext">Address: ${order.serviceAddress}</h5>
-                    <h5 class="subtext">Package: ${order.package}</h5>
-                    <hr/>
-                `
-            if(order.serviceCompleted == true)
-            {
-                html += `
-                        <h5 class="subtext" id="completed-status-${order.id}">Completed: ${order.serviceCompleted}</h5>
-                    </div>
-                `
-            } else
-            {
-                html += `
-                        <h5 class="subtext" id="completed-status-${order.id}">Completed: ${order.serviceCompleted}</h5>
-                        <button type="button" id="completed-btn-${order.id}" onclick="completeService(${order.id})">Mark as Completed</button>
-                    </div>
-                `
-            }
-        }
-    });
 
     html += `</div>`
     app.innerHTML = html
@@ -1377,25 +1340,99 @@ function editOrderAssignment(orderID, adminID)
 {
     // init app
     let app = document.getElementById('toolbox-form')
-    
-    let html = `
-        <h4>Employee Task Assignment</h4>
+    let html = ``
+
+    orderList.forEach(order => {
+        if(order.id == orderID)
+        {
+            console.log(order.serviceCompleted)
+            html = `
+                <h4>Employee Task Assignment</h4>
                 <form onsubmit="return false;" method="post" id="assignment-form">
                     <div id="alert"></div>
                     <div class="grid col-2">
-                        <div>
-                            <label for="orderID">Order ID</label><br>
-                            <input type="text" id="orderID" name="orderID" value="${orderID}" disabled>
-                        </div>
 
-                        <div> 
-                            <label for="empID">Employee ID</label><br>
-                            <input type="text" id="empID" name="empID" value="${adminID}">
+                        <div>
+                            <h5>Order Details</h5>
+                            <div class="grid col-2">
+                                <div>
+                                    <label for="orderID">Order ID</label><br>
+                                    <input type="text" id="orderID" name="orderID" value="${order.id}" disabled>
+                                </div>
+
+                                <div> 
+                                    <label for="empID">Employee ID</label><br>
+                                    <input type="text" id="empID" name="empID" value="${adminID}">
+                                </div>
+
+                                <div> 
+                                    <label for="dateOrdered">Date Ordered</label><br>
+                                    <input type="text" id="dateOrdered" name="dateOrdered" value="${order.date}">
+                                </div>
+
+                                 <div> 
+                                    <label for="timeOrdered">Time Ordered</label><br>
+                                    <input type="text" id="timeOrdered" name="timeOrdered" value="${order.time}">
+                                </div>
+
+                                <div> 
+                                    <label for="serviceDuration">Duration</label><br>
+                                    <input type="text" id="serviceDuration" name="serviceDuration" value="${order.duration}">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <h5>Service Details</h5>
+                            <div class="grid col-2">
+                                <div> 
+                                    <label for="serviceDate">Service Date</label><br>
+                                    <input type="text" id="serviceDate" name="serviceDate" value="${order.serviceDate}">
+                                </div>
+
+                                <div> 
+                                    <label for="serviceTime">Service Time</label><br>
+                                    <input type="text" id="serviceTime" name="serviceTime" value="${order.serviceTime}">
+                                </div>
+
+                                <div> 
+                                    <label for="serviceAddress">Address</label><br>
+                                    <input type="text" id="serviceAddress" name="serviceAddress" value="${order.serviceAddress}">
+                                </div>
+
+                                <div> 
+                                    <label for="packageType">Package</label><br>
+                                    <input type="text" id="packageType" name="packageType" value="${order.package}">
+                                </div>
+                                `
+
+                                if(order.serviceCompleted == true)
+                                {
+                                    html += `
+                                        <div> 
+                                            <label for="serviceCompleted">Completed</label><br>
+                                            <input type="checkbox" id="serviceCompleted" name="serviceCompleted" checked>
+                                        </div>
+                                    `
+                                } else
+                                {
+                                    html += `
+                                        <div> 
+                                            <label for="serviceCompleted">Completed</label><br>
+                                            <input type="checkbox" id="serviceCompleted" name="serviceCompleted">
+                                        </div>
+                                    `
+                                }
+
+                                html += `
+                            </div>
                         </div>
                     </div>
                     <button type="submit" onclick="updateAdminTask(orderID.value, empID.value)">Submit</button>
                 </form>
-    `
+            `
+        }
+    });
 
     app.innerHTML = html
 }
@@ -1506,6 +1543,19 @@ async function updateAdminTask(orderID, adminID)
     let orderURL = url + `order/${orderID}`
 
     let adminExists = false
+    const orderedDate = document.getElementById('dateOrdered').value
+    const orderedTime = document.getElementById('timeOrdered').value
+    const serviceDuration = document.getElementById('serviceDuration').value
+    const serviceDate = document.getElementById('serviceDate').value
+    const serviceTime = document.getElementById('serviceTime').value
+    const serviceAddress = document.getElementById('serviceAddress').value
+    const servicePackage = document.getElementById('packageType').value
+    let serviceCompleted = false
+
+    if(document.getElementById('serviceCompleted').checked == true)
+    {
+        serviceCompleted = true
+    }
 
     // check if admin exists
     adminList.forEach(admin => {
@@ -1524,6 +1574,14 @@ async function updateAdminTask(orderID, adminID)
             if(order.id == orderID)
             {
                 // update locally
+                order.date = orderedDate
+                order.time = orderedTime
+                order.duration = parseInt(serviceDuration)
+                order.serviceDate = serviceDate
+                order.serviceTime = serviceTime
+                order.serviceAddress = serviceAddress
+                order.servicePackage = parseInt(servicePackage)
+                order.completeService = serviceCompleted
                 order.servicedBy = adminID
                 try 
                 {
