@@ -972,9 +972,47 @@ function buildCustomerOrdersTool()
     app.innerHTML = html
 }
 
+// written by Jeb Bradford 12/1/2024
 function showCustomerOrders(customerEmail)
 {
-    console.log('This is where we will run the code to call the controller code to run a sql statement that joins the dbs as gets all orders with the matching custEmail')
+
+    removeToolboxForm()
+    // get app DOM
+    const app = document.getElementById('toolbox')
+
+    // add order info to table
+    let html = `<h5>Customer Orders</h5>
+    <h6>Customer: ${customerEmail}</h6>
+    <table>
+        <tr>
+            <th>Order Id</th>
+            <th>Package</th>
+            <th>Date</th>
+        </tr> 
+    `
+
+    customerList.forEach(customer => {
+        if(customer.email == customerEmail)
+        {
+            orderList.forEach(order => {
+                if(order.servicedBy == customer.id)
+                {
+                    html += `
+                        <tr>
+                            <td>${order.id}</td>
+                            <td>${order.package}</td>
+                            <td>${order.servicedBy}</td>
+                        </tr>
+                    `
+                }
+            });
+        }
+    });
+
+    // close table
+    html += `</table>`
+
+    app.innerHTML = html
 }
 
 // Build Reports
@@ -1018,7 +1056,6 @@ function buildAdminToolsNav(adminID)
         <div class="tool-nav-flexbox">
             <div onclick="buildAdminDataTable()">Edit Employee Data</div>
             <div onclick="buildEmployeeTaskAssignment()">Employee Task Assignment</div>
-            <div onclick="buildOrderEditingTool()">Edit Orders</div>
             <div onclick="buildEmployeeEvents('${adminID}')">My Events</div>
         </div>
     `
