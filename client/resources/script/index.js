@@ -974,7 +974,70 @@ function buildCustomerOrdersTool()
 
 function showCustomerOrders(customerEmail)
 {
+
+    let customerLost = [
+        {
+            Id : 1,
+            email : "jebbradford33@gmail.com"
+        }
+    ]
+    let orderLost = [
+        {
+            orderedBy : 1,
+            package : 2
+        }
+    ]
+
     console.log('This is where we will run the code to call the controller code to run a sql statement that joins the dbs as gets all orders with the matching custEmail')
+    // Find the customer id that matches the customer email
+    let customer = customerLost.filter((customer) => {
+        console.log(customer.email)
+        console.log(customerEmail)
+        if(customerEmail = customer.email){
+            return customer
+        }
+    })
+    console.log(customer[0].Id)
+    // Find the orders with OrderedBy that matches customer.Id
+    let orders = orderLost.filter((order => {
+        if(customer[0].Id = order.orderedBy){
+            return order
+        }
+    }))
+
+    // *******************************
+    // DISPLAY RESULTING ARRAY
+    console.log(orders)
+
+    removeToolboxForm()
+    // get app DOM
+    const app = document.getElementById('toolbox')
+
+    // add order info to table
+    let html = `<h5>Customer Orders</h5>
+    <table>
+        <tr>
+            <th>Order Id</th>
+            <th>Package</th>
+            <th>Date</th>
+        </tr> 
+    `
+    // indivudal order info insertion
+    orders.forEach(order => {
+        console.log(order)
+        // I DIDN'T KNOW WHAT TO DISPLAY HERE
+        // ALSO I DON'T KNOW IF IT IS "order.Id" or "order.id" id/Id
+        html += `
+            <tr>
+                <td>${order.Id}</td>
+                <td>${order.package}</td>
+            </tr>
+        `
+    });
+    // close table
+    html += `</table>`
+
+    app.innerHTML = html
 }
 
 // Build Reports
