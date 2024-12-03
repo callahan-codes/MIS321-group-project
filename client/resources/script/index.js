@@ -321,6 +321,7 @@ async function createNewAdmin()
     Written by Connor Gilstrap 11/7/2024
         Updated by Bryce Callahan 11/15/2024
         Updated by Bryce Callahan 11/19/2024
+        Updated by Hayden Walls 12/2/2024
 */
 async function createNewOrder()
 {
@@ -335,6 +336,70 @@ async function createNewOrder()
     const serviceTime = document.getElementById('serviceTime').value
     const alert = document.getElementById('alert')
     alert.style.backgroundColor = 'var(--alert)'
+
+    // I was having some issues with string time and date time conversion. These
+    // functions should fix that.
+
+
+    //takes take string as an input, converts it to date object format, then extracts the YYYY-MM-DD
+    const normalizeDateString = (dateStr) => new Date(dateStr).toISOString().split("T")[0];
+
+    //This (temporarily, hopefully) converts the time into something with the hours and minutes as simple
+    //numbers, which should make comparisons more easier.
+    const parseTimeTo24Hour = (time) => {
+        const [hour, modifier] = time.split(" ");
+        let [hours, minutes] = hour.split(":").map(Number);
+        if (modifier === "PM" && hours !== 12) hours += 12;
+        if (modifier === "AM" && hours === 12) hours = 0;
+        return { hours, minutes };
+    };
+
+    //This SHOULD convert the 24 hour time back into the 12 hour time, since its easier to understand
+    //from a customer and employees perspective.
+    const formatTime = (hour) => {
+        const period = hour < 12 ? "AM" : "PM";
+        const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+        return `${formattedHour}:00 ${period}`;
+    };
+
+
+    //This is a simple boole that determines whether a selected date is tomorrow or later.
+    const isTomorrowOrLater = (date) => {
+        const selectedDate = new Date(date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Remove time part
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate());
+        return selectedDate >= tomorrow;
+    };
+
+    // Fetch unavailable slots for scheduling!
+
+    const fetchUnavailableSlots = (selectedDate) => {
+        //selected date is turned into YYYY-MM-DD.
+        const normalizedDate = normalizeDateString(selectedDate);
+
+        //
+
+        const ordersForDate = orderList.filter(
+            //This should populate a list of orders for the specific date that has been selected, so as to 
+            //prevent mismatches and whatnot.
+            (order) => normalizeDateString(order.serviceDate) === normalizedDate
+        );
+
+        //Initializes an array of slots that are unavailable for scheduling
+        const unavailableSlots = [];
+        ordersForDate.forEach((order) => {
+            const startHour = parseTimeTo24Hour(order.serviceTime).hours;
+            const endHour = startHour + parseInt(order.duration);
+            for (let hour = startHour; hour < endHour; hour++) {
+                unavailableSlots.push(formatTime(hour));
+            }
+        });
+
+        //Returns the array
+        return unavailableSlots;
+    };
 
     // check email
     if (email === null || email === undefined || email === '' || email.trim().length === 0)
@@ -374,6 +439,32 @@ async function createNewOrder()
     // complete order
     else 
     {
+        // Fetch unavailable slots for the selected date
+        const unavailableSlots = fetchUnavailableSlots(serviceDate);
+            
+        // Check if there's already an event for the day
+        const ordersForDay = orderList.filter(
+            (order) => normalizeDateString(order.serviceDate) === normalizeDateString(serviceDate)
+        );
+        
+        if (ordersForDay.length > 0) {
+            alert.style.display = 'block';
+            alert.innerHTML = 'An event is already scheduled for the selected day. Please choose a different date.';
+            console.log('Order creation failed because another event is already scheduled for this date.');
+            return;
+        }
+
+        // Check for time slot conflicts
+        const startHour = parseTimeTo24Hour(serviceTime).hours;
+        for (let hour = startHour; hour < startHour + parseInt(serviceDuration); hour++) {
+            if (unavailableSlots.includes(formatTime(hour))) {
+                alert.style.display = 'block';
+                alert.innerHTML = 'The selected time slot is unavailable. Please choose a different time.';
+                console.log('Order creation failed due to unavailable time slot.');
+                return;
+            }
+        }
+
         // display success alert
         alert.style.display = 'block'
         alert.style.backgroundColor = 'var(--alert-pass)'
