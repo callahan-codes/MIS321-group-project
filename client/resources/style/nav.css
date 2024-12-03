@@ -58,6 +58,17 @@ nav ul li
     cursor: pointer;
 }
 
+nav ul li a
+{
+    color: var(--white);
+    text-decoration: none;
+}
+
+nav li:hover a
+{
+    color: var(--red);
+}
+
 nav li:hover {
     background-color: var(--white);
     color: var(--red);
