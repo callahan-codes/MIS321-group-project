@@ -25,7 +25,7 @@ namespace api.Handlers
             await connection.OpenAsync();
 
             // create sql command for db 
-            using var command = new MySqlCommand("SELECT * FROM titletowncatering.customer", connection);
+            using var command = new MySqlCommand("SELECT * FROM `customer`", connection);
 
             // read response from db
             using var reader = await command.ExecuteReaderAsync();
@@ -125,7 +125,7 @@ namespace api.Handlers
             using var command = new MySqlCommand("", connection);
 
             // command text | soft delete
-            command.CommandText = @$"DELETE FROM `titletowncatering`.`customer` WHERE (`CustId` = '{customerID}');";
+            command.CommandText = @$"DELETE FROM customer WHERE (`CustId` = '{customerID}');";
 
             // prepare command
             command.Prepare();

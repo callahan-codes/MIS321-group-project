@@ -28,11 +28,7 @@ namespace api.Databases
 
         public Database()
         {
-            /* 
-                we will use the db made by jeb after we have all tested our code on localhost.
-                cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
-            */
-            cs = "Server=127.0.0.1;User ID=root;Password=Gasmask2910!;Database=titletowncatering";
+            cs = "Server=sm9j2j5q6c8bpgyq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;User ID=ba5r8e9ugu5uzkme;Password=kkknsjs8hevect3s;Database=cq3spjd6bhfmelqa";
         }
 
         /*

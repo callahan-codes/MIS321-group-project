@@ -14,7 +14,7 @@ namespace api.Handlers
 
             using var connection = new MySqlConnection(cs);
             await connection.OpenAsync();
-            using var command = new MySqlCommand("SELECT * FROM titletowncatering.order;", connection);
+            using var command = new MySqlCommand("SELECT * FROM `order`;", connection);
 
             using var reader = await command.ExecuteReaderAsync();
            while (await reader.ReadAsync())
@@ -71,7 +71,7 @@ namespace api.Handlers
             // paymentid
 
             // command text
-            command.CommandText = @$"INSERT INTO titletowncatering.order(OrderId, OrderDate, OrderTime, OrderCancelled, ServiceDate, ServiceTime, ServiceAddress, ServiceDuration, PackageType, OrderedBy, ServicedBy, ServiceComplete) 
+            command.CommandText = @$"INSERT INTO order(OrderId, OrderDate, OrderTime, OrderCancelled, ServiceDate, ServiceTime, ServiceAddress, ServiceDuration, PackageType, OrderedBy, ServicedBy, ServiceComplete) 
             VALUES(@orderID, @orderDate, @orderTime, @orderCancelled, @orderServiceDate, @orderServiceTime, @orderServiceAddress, @orderDuration, @orderPackage, @orderedBy, @servicedBy, @serviceCompleted);";
 
             Console.WriteLine(command.CommandText);
@@ -114,7 +114,7 @@ namespace api.Handlers
             using var command = new MySqlCommand("", connection);
 
             // command text | soft delete
-            command.CommandText = @$"UPDATE titletowncatering.order SET OrderDate = '{myOrder.Date}', OrderTime = '{myOrder.Time}', OrderCancelled = {myOrder.Cancelled}, ServiceDate = '{myOrder.ServiceDate}', ServiceTime = '{myOrder.ServiceTime}', ServiceAddress = '{myOrder.ServiceAddress}', ServiceDuration = {myOrder.Duration}, PackageType = {myOrder.Package}, OrderedBy = {myOrder.OrderedBy}, ServicedBy = {myOrder.ServicedBy}, ServiceComplete = {myOrder.ServiceCompleted} WHERE OrderId = {myOrder.Id};";
+            command.CommandText = @$"UPDATE order SET OrderDate = '{myOrder.Date}', OrderTime = '{myOrder.Time}', OrderCancelled = {myOrder.Cancelled}, ServiceDate = '{myOrder.ServiceDate}', ServiceTime = '{myOrder.ServiceTime}', ServiceAddress = '{myOrder.ServiceAddress}', ServiceDuration = {myOrder.Duration}, PackageType = {myOrder.Package}, OrderedBy = {myOrder.OrderedBy}, ServicedBy = {myOrder.ServicedBy}, ServiceComplete = {myOrder.ServiceCompleted} WHERE OrderId = {myOrder.Id};";
 
             // prepare command
             command.Prepare();

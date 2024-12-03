@@ -23,7 +23,7 @@ namespace api.Handlers
             await connection.OpenAsync();
 
             // create sql command for db 
-            using var command = new MySqlCommand("SELECT * FROM titletowncatering.admin", connection);
+            using var command = new MySqlCommand("SELECT * FROM `admin`", connection);
 
             // read response from db
             using var reader = await command.ExecuteReaderAsync();
@@ -94,7 +94,7 @@ namespace api.Handlers
             using var command = new MySqlCommand("", connection);
 
             // command text | soft delete
-            command.CommandText = @$"UPDATE titletowncatering.admin SET AdminPassword = '{admin.Password}', AdminEmail = '{admin.Email}' WHERE AdminId = {admin.Id};";
+            command.CommandText = @$"UPDATE admin SET AdminPassword = '{admin.Password}', AdminEmail = '{admin.Email}' WHERE AdminId = {admin.Id};";
 
             // prepare command
             command.Prepare();
@@ -118,7 +118,7 @@ namespace api.Handlers
             using var command = new MySqlCommand("", connection);
 
             // command text | soft delete
-            command.CommandText = @$"DELETE FROM `titletowncatering`.`admin` WHERE (`AdminId` = '{adminID}');";
+            command.CommandText = @$"DELETE FROM admin WHERE (`AdminId` = '{adminID}');";
 
             // prepare command
             command.Prepare();
