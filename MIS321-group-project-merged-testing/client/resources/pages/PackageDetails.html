@@ -1,0 +1,123 @@
+<!-- 
+    Written by Bryce Callahan 10/30/2024
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="./../style/index.css"> <!-- css -->
+    <link rel="shortcut icon" type="image/x-icon" href="./../images/TTC.ico" /> <!-- icon -->
+    <title>Packages</title> <!-- title -->
+</head>
+
+<!-- body -->
+<body onload="handleOnLoad()">
+
+    <!-- loader | static -->
+    <div class="loader-screen" id="loader">
+        <div>
+            <span class="loader"></span>
+            <h1>Loading</h1>
+        </div>
+    </div>
+
+    <!-- navigation | static -->
+    <nav>
+        <div>
+            <a href="./../../index.html"><img src="./../images/TTC.ico" alt="T-Town Catering Logo"/></a>
+            <ul>
+                <li onclick="appScreenDisplay('admin')">Admin Login</li>
+                <li onclick="appScreenDisplay('order')">Schedule Service</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- app content | dynamic -->
+    <div id="app-screen">
+        <div id="app-close-btn" onclick="appScreenDisplay('')">X</div>
+        <div id="app"></div>
+    </div>
+
+    <!-- main content | static -->
+    <main>
+
+        <!-- container -->
+        <div class="container">
+
+            <h2>Package Details</h2>
+
+        </div>
+
+        <!-- container -->
+        <div class="container" id="package1">
+
+            <h3>Package 1</h3>
+            <p>
+                Package 1 of our catering service offers a delightful selection of high-quality dishes, 
+                ensuring both generous portions and exquisite flavors for every event. Perfect for gatherings of all sizes, 
+                this package combines variety and taste to leave your guests satisfied and impressed.
+            </p>
+            <p>
+                At $100, Package 1 includes:
+            </p>
+            <ul>
+                <li>Food</li>
+                <li>Utensils</li>
+            </ul>
+        </div>
+
+        <!-- container -->
+        <div class="container" id="package2">
+
+            <h3>Package 2</h3>
+            <p>
+                Package 2 of our catering service offers a delightful selection of high-quality dishes, 
+                ensuring both generous portions and exquisite flavors for every event. Perfect for gatherings of all sizes, 
+                this package combines variety and taste to leave your guests satisfied and impressed.
+            </p>
+            <p>
+                At $200, Package 2 includes:
+            </p>
+            <ul>
+                <li>Quality Food</li>
+                <li>Quality Utensils</li>
+                <li>Idk the other stuff</li>
+            </ul>
+        </div>
+
+        <!-- container -->
+        <div class="container" id="package3">
+
+            <h3>Package 3</h3>
+            <p>
+                Package 3 of our catering service offers a delightful selection of high-quality dishes, 
+                ensuring both generous portions and exquisite flavors for every event. Perfect for gatherings of all sizes, 
+                this package combines variety and taste to leave your guests satisfied and impressed.
+            </p>
+            <p>
+                At $300, Package 3 includes:
+            </p>
+            <ul>
+                <li>Food</li>
+                <li>Utensils</li>
+                <li>Idk the other stuff</li>
+            </ul>
+        </div>
+
+    </main> 
+
+    <!-- footer | static -->
+    <footer>
+        <div>
+            <p>Phone: <a href="tel:">(205) 123-4567</a></p>
+            <p>Address: <a target="_blank" href="https://www.google.com/maps/place/The+University+of+Alabama/@33.2114385,-87.5426805,16z/data=!3m1!4b1!4m6!3m5!1s0x888602998cde20bb:0xdf0e29abdbae0912!8m2!3d33.2114385!4d-87.5401002!16zL20vMDF3ZGwz?entry=ttu&g_ep=EgoyMDI0MTAxMy4wIKXMDSoASAFQAw%3D%3D">123 Tuscaloosa Drive</a></p>
+        </div>
+    </footer>
+    
+    <!-- script call -->
+    <script src="./../script/index.js"></script>
+</body>
+</html>
