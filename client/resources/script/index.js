@@ -987,7 +987,7 @@ function showCustomerOrders(customerEmail)
         <tr>
             <th>Order Id</th>
             <th>Package</th>
-            <th>Date</th>
+            <th>Date Ordered</th>
         </tr> 
     `
 
@@ -1001,7 +1001,7 @@ function showCustomerOrders(customerEmail)
                         <tr>
                             <td>${order.id}</td>
                             <td>${order.package}</td>
-                            <td>${order.servicedBy}</td>
+                            <td>${order.date}</td>
                         </tr>
                     `
                 }
