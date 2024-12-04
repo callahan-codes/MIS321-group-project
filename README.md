@@ -90,6 +90,11 @@
   <li>Updated some payment handler logic and built the payment api in indexjs.</li>
 </ul>
 
+<h2>12/3/2024 | BC</h2>
+<ul>
+  <li>Final push</li>
+</ul>
+
 <hr/>
 <hr/>
 <hr/>
