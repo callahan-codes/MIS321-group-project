@@ -1044,6 +1044,13 @@ function buildCustomerToolsNav()
     app.innerHTML = html
 }
 
+// Build Customer Orders search tool dom
+/*
+    this builds the dom for the order search tool
+    per customer
+
+    written by Bryce Callahan 11/26/2024
+*/
 function buildCustomerOrdersTool()
 {
     const app = document.getElementById('toolbox')
@@ -1382,7 +1389,7 @@ function buildAllSalesReport()
 */
 function buildEmployeeTaskAssignment()
 {
-    removeToolboxForm()
+    // removeToolboxForm()
     // init app
     let app = document.getElementById('toolbox')
 
@@ -1473,7 +1480,6 @@ function editOrderAssignment(orderID, adminID)
     orderList.forEach(order => {
         if(order.id == orderID)
         {
-            console.log(order.serviceCompleted)
             html = `
                 <h4>Employee Task Assignment</h4>
                 <form onsubmit="return false;" method="post" id="assignment-form">
@@ -1506,7 +1512,28 @@ function editOrderAssignment(orderID, adminID)
                                 <div> 
                                     <label for="serviceDuration">Duration</label><br>
                                     <input type="text" id="serviceDuration" name="serviceDuration" value="${order.duration}">
-                                </div>
+                                </div>`
+
+                                if(order.cancelled == true)
+                                {
+                                    html += `
+                                        <div> 
+                                            <label for="serviceCancelled">Cancelled</label><br>
+                                            <input type="checkbox" id="serviceCancelled" name="serviceCancelled" checked>
+                                        </div>
+                                    `
+                                } else
+                                {
+                                    html += `
+                                        <div> 
+                                            <label for="serviceCancelled">Cancelled</label><br>
+                                            <input type="checkbox" id="serviceCancelled" name="serviceCancelled">
+                                        </div>
+                                    `
+                                }
+
+                                html += `
+
                             </div>
 
                         </div>
@@ -1533,7 +1560,6 @@ function editOrderAssignment(orderID, adminID)
                                     <input type="text" id="packageType" name="packageType" value="${order.package}">
                                 </div>
                                 `
-
                                 if(order.serviceCompleted == true)
                                 {
                                     html += `
@@ -1678,12 +1704,19 @@ async function updateAdminTask(orderID, adminID)
     const serviceTime = document.getElementById('serviceTime').value
     const serviceAddress = document.getElementById('serviceAddress').value
     const servicePackage = document.getElementById('packageType').value
+    let serviceCancelled = false
     let serviceCompleted = false
 
-    if(document.getElementById('serviceCompleted').checked == true)
+    if(document.getElementById('serviceCompleted').checked)
     {
         serviceCompleted = true
+    } 
+    if(document.getElementById('serviceCancelled').checked)
+    {
+        serviceCancelled = true
     }
+
+    console.log(serviceCancelled, serviceCompleted)
 
     // check if admin exists
     adminList.forEach(admin => {
@@ -1708,9 +1741,11 @@ async function updateAdminTask(orderID, adminID)
                 order.serviceDate = serviceDate
                 order.serviceTime = serviceTime
                 order.serviceAddress = serviceAddress
-                order.servicePackage = parseInt(servicePackage)
-                order.completeService = serviceCompleted
+                order.package = parseInt(servicePackage)
+                order.serviceCompleted = serviceCompleted
+                order.cancelled = serviceCancelled
                 order.servicedBy = adminID
+
                 try 
                 {
                     // put | update in db

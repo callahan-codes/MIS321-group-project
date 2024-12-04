@@ -71,7 +71,7 @@ namespace api.Handlers
             // paymentid
 
             // command text
-            command.CommandText = @$"INSERT INTO order(OrderId, OrderDate, OrderTime, OrderCancelled, ServiceDate, ServiceTime, ServiceAddress, ServiceDuration, PackageType, OrderedBy, ServicedBy, ServiceComplete) 
+            command.CommandText = @$"INSERT INTO cq3spjd6bhfmelqa.order(OrderId, OrderDate, OrderTime, OrderCancelled, ServiceDate, ServiceTime, ServiceAddress, ServiceDuration, PackageType, OrderedBy, ServicedBy, ServiceComplete) 
             VALUES(@orderID, @orderDate, @orderTime, @orderCancelled, @orderServiceDate, @orderServiceTime, @orderServiceAddress, @orderDuration, @orderPackage, @orderedBy, @servicedBy, @serviceCompleted);";
 
             Console.WriteLine(command.CommandText);
@@ -114,7 +114,7 @@ namespace api.Handlers
             using var command = new MySqlCommand("", connection);
 
             // command text | soft delete
-            command.CommandText = @$"UPDATE order SET OrderDate = '{myOrder.Date}', OrderTime = '{myOrder.Time}', OrderCancelled = {myOrder.Cancelled}, ServiceDate = '{myOrder.ServiceDate}', ServiceTime = '{myOrder.ServiceTime}', ServiceAddress = '{myOrder.ServiceAddress}', ServiceDuration = {myOrder.Duration}, PackageType = {myOrder.Package}, OrderedBy = {myOrder.OrderedBy}, ServicedBy = {myOrder.ServicedBy}, ServiceComplete = {myOrder.ServiceCompleted} WHERE OrderId = {myOrder.Id};";
+            command.CommandText = @$"UPDATE cq3spjd6bhfmelqa.order SET OrderDate = '{myOrder.Date}', OrderTime = '{myOrder.Time}', OrderCancelled = {myOrder.Cancelled}, ServiceDate = '{myOrder.ServiceDate}', ServiceTime = '{myOrder.ServiceTime}', ServiceAddress = '{myOrder.ServiceAddress}', ServiceDuration = {myOrder.Duration}, PackageType = {myOrder.Package}, OrderedBy = {myOrder.OrderedBy}, ServicedBy = {myOrder.ServicedBy}, ServiceComplete = {myOrder.ServiceCompleted}, OrderCancelled = {myOrder.Cancelled} WHERE OrderId = {myOrder.Id};";
 
             // prepare command
             command.Prepare();
