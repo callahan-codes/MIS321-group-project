@@ -1769,7 +1769,7 @@ async function updateAdminTask(orderID, adminID)
         // show alert
         alert.style.display = 'block'
         alert.style.backgroundColor = 'var(--alert-pass)'
-        alert.innerHTML = `The Admin (ID: ${adminID}) has succesfully been scheduled to service Order #${orderID}.` 
+        alert.innerHTML = `The Order (ID: ${orderID}) has succesfully been edited.` 
 
         // rebuild tasks
         buildEmployeeTaskAssignment()
