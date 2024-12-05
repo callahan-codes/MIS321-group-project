@@ -308,7 +308,7 @@ async function createNewAdmin()
         // show alert
         alert.style.display = 'block'
         alert.style.backgroundColor = 'var(--alert-pass)'
-        alert.innerHTML = `The admin account for ${newAdmin.email} has been made.<br><br><div class="profile-btn" onclick="buildAdminLoginForm()">Login</div>`
+        alert.innerHTML = `The admin account for ${newAdmin.email} has been made.`
 
        // clear admin create form
        clearAllFormFields('admin-create-form')
@@ -594,7 +594,7 @@ function appScreenDisplay(mode)
     {
         // if mode == admin, build and show screen
         case 'admin':
-            buildCreateAdminForm()
+            buildAdminLoginForm()
             screen.style.display = 'block'
             break
         // if mode == order, build and show screen
@@ -621,7 +621,7 @@ function appScreenDisplay(mode)
 function buildCreateAdminForm()
 {
     // get app dom
-    const app = document.getElementById('app')
+    const app = document.getElementById('toolbox')
 
     // init html content
     let html = `<div class="container">
@@ -644,7 +644,6 @@ function buildCreateAdminForm()
                         <input type="password" id="adminPasswordConfirm" name="adminPasswordConfirm" autocomplete="off">
                         <button type="submit" onclick="createNewAdmin()">Submit</button>
                     </form>
-                    <p class="text-center pd-top">Already have an account? <span class="sign-in-btn" onclick="buildAdminLoginForm()">Sign In</span></p>
                 </div>
     `
 
@@ -685,7 +684,6 @@ function buildAdminLoginForm()
                         </div>
                         <button type="submit" onclick="adminLoginCheck()">Submit</button>
                     </form>
-                    <p class="text-center pd-top">Don't have an account? <span class="sign-in-btn" onclick="buildCreateAdminForm()">Create account</span></p>
                 </div>
     `
 
@@ -1093,6 +1091,7 @@ function showCustomerOrders(customerEmail)
         if(customer.email == customerEmail)
         {
             orderList.forEach(order => {
+                console.log(order.servicedBy)
                 if(order.servicedBy == customer.id)
                 {
                     html += `
@@ -1152,6 +1151,7 @@ function buildAdminToolsNav(adminID)
 
     let html = `
         <div class="tool-nav-flexbox">
+            <div onclick="buildCreateAdminForm()">Create New Admin</div>
             <div onclick="buildAdminDataTable()">Edit Employee Data</div>
             <div onclick="buildEmployeeTaskAssignment()">Employee Task Assignment</div>
             <div onclick="buildEmployeeEvents('${adminID}')">My Events</div>
