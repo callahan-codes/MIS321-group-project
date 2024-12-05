@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Hayden\\Downloads\\MIS321-group-project-merged-testing\\MIS321-group-project-merged-testing\\api\\api.csproj": {}
+    "C:\\Users\\Hayden\\Desktop\\MIS321-group-project\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Hayden\\Downloads\\MIS321-group-project-merged-testing\\MIS321-group-project-merged-testing\\api\\api.csproj": {
+    "C:\\Users\\Hayden\\Desktop\\MIS321-group-project\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hayden\\Downloads\\MIS321-group-project-merged-testing\\MIS321-group-project-merged-testing\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\Hayden\\Desktop\\MIS321-group-project\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Users\\Hayden\\Downloads\\MIS321-group-project-merged-testing\\MIS321-group-project-merged-testing\\api\\api.csproj",
+        "projectPath": "C:\\Users\\Hayden\\Desktop\\MIS321-group-project\\api\\api.csproj",
         "packagesPath": "C:\\Users\\Hayden\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hayden\\Downloads\\MIS321-group-project-merged-testing\\MIS321-group-project-merged-testing\\api\\obj\\",
+        "outputPath": "C:\\Users\\Hayden\\Desktop\\MIS321-group-project\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Hayden\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "DotNetEnv": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
             "MySqlConnector": {
               "target": "Package",
               "version": "[2.3.7, )"

@@ -1,3 +1,4 @@
+using DotNetEnv;
 using api.Handlers;
 using api.Models;
 
@@ -22,15 +23,32 @@ namespace api.Databases
 
         // put ur handler and static list below this. COMMENT YOUR CODE. EVERYTHING.
 
-        public Database()
+            public Database()
         {
-            /* 
-                we will use the db made by jeb after we have all tested our code on localhost.
-                cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
-            */
-            cs = "Server=127.0.0.1;User ID=root;Password=MyPassword;Database=titletowncatering";
-        }
+            // Load environment variables from the .env file
+            Env.Load();
 
+            // Build the connection string dynamically
+            string host = Env.GetString("DB_HOST");
+            string port = Env.GetString("DB_PORT");
+            string user = Env.GetString("DB_USER");
+            string password = Env.GetString("DB_PASSWORD");
+            string database = Env.GetString("DB_NAME");
+
+            cs = $"Server={host};Port={port};User ID={user};Password={password};Database={database};Convert Zero Datetime=True";
+        }
+            
+            
+            
+            
+            
+            
+            
+            // /* 
+            //     we will use the db made by jeb after we have all tested our code on localhost.
+            //     cs = "Server=qn0cquuabmqczee2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Port=3306;User ID=bvlgcnefshzlt68q;Password=u9x7q1ky398srfal;Database=wpwwyo4a82kv2jrd;Convert Zero Datetime=True";
+            // */
+            // cs = "Server=127.0.0.1;User ID=root;Password=MyPassword;Database=titletowncatering";
         /*
             ADMIN TASKS
 
