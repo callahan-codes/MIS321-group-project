@@ -171,25 +171,5 @@ namespace api.Databases
                 await GetAllOrders();
             }
         }
-
-
-        /*
-            Payment TASKS
-
-                Written by Hayden Walls 11/18/2024
-                updated by BC 11/21/2024
-        */
-        // // Get all customers
-        // public async Task<List<Payment>> GetAllPayments()
-        // {
-        //     if(cs != null)
-        //     {
-        //         // set list from payment handler
-        //         AllPayment = await paymentHandler.GetAllPayments(cs);
-        //     }
-            
-        //     // return data
-        //     return AllPayment;
-        // }
     }
 }

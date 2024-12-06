@@ -5,7 +5,6 @@ let url = 'http://localhost:5049/api/'
 let adminList = []
 let customerList = []
 let orderList = []
-// let paymentList = []  
 
 // Handle Document OnLoad
 async function handleOnLoad()
@@ -16,8 +15,6 @@ async function handleOnLoad()
     await getAllCustomers()
     // get all orders
     await getAllOrders();
-    // get all payments
-    // await getAllPayments();
 
     // loader
     loaderDisplay()
@@ -172,54 +169,6 @@ async function getAllOrders()
     }
 }
 
-// Get all payments api call
-/*
-    this function gets the payment api URL,
-    fetches for a response, and assigns the
-    response data to the main orderList array.
-
-    Written by Bryce Callahan 11/21/2024
-*/
-async function getAllPayments()
-{
-    // get admin url
-    const orderURL = url + 'payment';
-
-    // log
-    console.log(`Fetching Order API from ${orderURL}...`)
-
-    // try 
-    try
-    {
-        // if url isn't null
-        if(url != null)
-        {
-            // fetch url
-            let response = await fetch(orderURL)
-
-            // error handle | https://dev.to/dionarodrigues/fetch-api-do-you-really-know-how-to-handle-errors-2gj0
-            if(response.ok)
-            {
-                // assign recipe list to json
-                let data = await response.json()
-                paymentList = data
-
-                // log
-                console.log('API fetched: ' + paymentList.length + ' orders pulled from the database.')
-
-            } else 
-            {
-                // log
-                console.log("API FETCH ERROR: " + response.status)
-            }
-        }
-
-    } catch (error) // catch error
-    {
-        // log error
-        alert("Promise failed\n\n" + error + "\n\nPlease try again by reloading the page or checking your server.")
-    }
-}
 
 // Admin Creation
 /*
@@ -441,11 +390,15 @@ async function createNewOrder()
     {
         // Fetch unavailable slots for the selected date
         const unavailableSlots = fetchUnavailableSlots(serviceDate);
+
+        console.log(unavailableSlots)
             
         // Check if there's already an event for the day
         const ordersForDay = orderList.filter(
             (order) => normalizeDateString(order.serviceDate) === normalizeDateString(serviceDate)
         );
+
+        console.log(ordersForDay)
         
         if (ordersForDay.length > 0) {
             alert.style.display = 'block';
@@ -1071,7 +1024,6 @@ function buildCustomerOrdersTool()
 // written by Jeb Bradford 12/1/2024
 function showCustomerOrders(customerEmail)
 {
-
     removeToolboxForm()
     // get app DOM
     const app = document.getElementById('toolbox')
@@ -1091,8 +1043,7 @@ function showCustomerOrders(customerEmail)
         if(customer.email == customerEmail)
         {
             orderList.forEach(order => {
-                console.log(order.servicedBy)
-                if(order.servicedBy == customer.id)
+                if(order.orderedBy == customer.id)
                 {
                     html += `
                         <tr>
@@ -1716,8 +1667,6 @@ async function updateAdminTask(orderID, adminID)
         serviceCancelled = true
     }
 
-    console.log(serviceCancelled, serviceCompleted)
-
     // check if admin exists
     adminList.forEach(admin => {
         if(admin.id == adminID)
@@ -2004,7 +1953,6 @@ async function submitCustomerEdit() {
         document.getElementById('toolbox').innerHTML = `
             ${createCustomerEditTable()}
         `;
-        console.log(customerList[customerIndex])
     } else {
         // show alert
         alert.style.display = 'block'

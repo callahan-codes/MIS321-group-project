@@ -3,7 +3,6 @@ using api.Databases;
 using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers
 {
-    // written by Bryce Callahan
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
